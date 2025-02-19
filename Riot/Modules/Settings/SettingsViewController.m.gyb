@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2018-2024 New Vector Ltd.
 Copyright 2017 Vector Creations Ltd
@@ -171,7 +177,8 @@ typedef NS_ENUM(NSUInteger, LABS_ENABLE)
 typedef NS_ENUM(NSUInteger, SECURITY)
 {
     SECURITY_BUTTON_INDEX = 0,
-    DEVICE_MANAGER_INDEX
+    DEVICE_MANAGER_INDEX,
+    SECURITY_SEND_READ_RECEIPTS
 };
 
 typedef NS_ENUM(NSUInteger, ACCOUNT)
@@ -417,7 +424,10 @@ SSOAuthenticationPresenterDelegate>
     
     Section *sectionSecurity = [Section sectionWithTag:SECTION_TAG_SECURITY];
     [sectionSecurity addRowWithTag:SECURITY_BUTTON_INDEX];
-        
+    if (BuildSettings.ibm_show_reading_confirmation) {
+        [sectionSecurity addRowWithTag:SECURITY_SEND_READ_RECEIPTS];
+    }
+
     if (RiotSettings.shared.enableNewSessionManager)
     {
         // NOTE: Add device manager entry point in the security section atm for debug purpose
@@ -446,7 +456,7 @@ SSOAuthenticationPresenterDelegate>
     sectionNotificationSettings.headerTitle = [VectorL10n settingsNotifications];
     [tmpSections addObject:sectionNotificationSettings];
     
-    if (BuildSettings.allowVoIPUsage && BuildSettings.stunServerFallbackUrlString && RiotSettings.shared.settingsScreenShowEnableStunServerFallback)
+    if (BuildSettings.allowVoIPUsage && BuildSettings.stunServerFallbackUrlString && RiotSettings.shared.settingsScreenShowEnableStunServerFallback && BuildSettings.ibm_enable_voip)
     {
         Section *sectionCalls = [Section sectionWithTag:SECTION_TAG_CALLS];
         sectionCalls.headerTitle = [VectorL10n settingsCallsSettings];
@@ -459,7 +469,7 @@ SSOAuthenticationPresenterDelegate>
         [tmpSections addObject:sectionCalls];
     }
     
-    if (BuildSettings.settingsScreenShowDiscoverySettings)
+    if (BuildSettings.settingsScreenShowDiscoverySettings && (BuildSettings.settingsScreenAllowAddingEmailThreepids || BuildSettings.settingsScreenAllowAddingPhoneThreepids))
     {
         Section *sectionDiscovery = [Section sectionWithTag:SECTION_TAG_DISCOVERY];
         NSInteger count = self.settingsDiscoveryTableViewSection.numberOfRows;
@@ -509,7 +519,7 @@ SSOAuthenticationPresenterDelegate>
         [tmpSections addObject:sectionIgnoredUsers];
     }
     
-    if (RiotSettings.shared.matrixApps)
+    if (RiotSettings.shared.matrixApps && BuildSettings.ibm_allow_integrations)
     {
         Section *sectionIntegrations = [Section sectionWithTag:SECTION_TAG_INTEGRATIONS];
         [sectionIntegrations addRowWithTag:INTEGRATIONS_INDEX];
@@ -529,18 +539,19 @@ SSOAuthenticationPresenterDelegate>
     [sectionUserInterface addRowWithTag:USER_INTERFACE_THEME_INDEX];
         
     [tmpSections addObject:sectionUserInterface];
-
-    Section *sectionTimeline = [Section sectionWithTag:SECTION_TAG_TIMELINE];
-    sectionTimeline.headerTitle = VectorL10n.settingsTimeline;
-
-    if (BuildSettings.roomScreenAllowTimelineStyleConfiguration)
-    {
-        [sectionTimeline addRowWithTag:TIMELINE_STYLE_INDEX];
+        if (BuildSettings.ibm_show_settings_timeline) {
+        Section *sectionTimeline = [Section sectionWithTag:SECTION_TAG_TIMELINE];
+        sectionTimeline.headerTitle = VectorL10n.settingsTimeline;
+        
+        if (BuildSettings.roomScreenAllowTimelineStyleConfiguration)
+        {
+            [sectionTimeline addRowWithTag:TIMELINE_STYLE_INDEX];
+        }
+        [sectionTimeline addRowWithTag:TIMELINE_SHOW_REDACTIONS_IN_ROOM_HISTORY_INDEX];
+        [sectionTimeline addRowWithTag:TIMELINE_USE_ONLY_LATEST_USER_AVATAR_AND_NAME_INDEX];
+        
+        [tmpSections addObject:sectionTimeline];
     }
-    [sectionTimeline addRowWithTag:TIMELINE_SHOW_REDACTIONS_IN_ROOM_HISTORY_INDEX];
-    [sectionTimeline addRowWithTag:TIMELINE_USE_ONLY_LATEST_USER_AVATAR_AND_NAME_INDEX];
-
-    [tmpSections addObject:sectionTimeline];
     
     if(BuildSettings.settingsScreenPresenceAllowConfiguration)
     {
@@ -552,25 +563,27 @@ SSOAuthenticationPresenterDelegate>
         [tmpSections addObject:sectionPresence];
     }
     
-    Section *sectionAdvanced = [Section sectionWithTag:SECTION_TAG_ADVANCED];
-    sectionAdvanced.headerTitle = [VectorL10n settingsAdvanced];
-    
-    if (BuildSettings.settingsScreenAllowChangingCrashUsageDataSettings)
-    {
-        [sectionAdvanced addRowWithTag:ADVANCED_CRASH_REPORT_INDEX];
+    if (BuildSettings.settingsScreenShowAdvancedSettings) {
+        Section *sectionAdvanced = [Section sectionWithTag:SECTION_TAG_ADVANCED];
+        sectionAdvanced.headerTitle = [VectorL10n settingsAdvanced];
+        
+        if (BuildSettings.settingsScreenAllowChangingCrashUsageDataSettings)
+        {
+            [sectionAdvanced addRowWithTag:ADVANCED_CRASH_REPORT_INDEX];
+        }
+        if (BuildSettings.settingsScreenAllowChangingRageshakeSettings)
+        {
+            [sectionAdvanced addRowWithTag:ADVANCED_ENABLE_RAGESHAKE_INDEX];
+        }
+        [sectionAdvanced addRowWithTag:ADVANCED_MARK_ALL_AS_READ_INDEX];
+        [sectionAdvanced addRowWithTag:ADVANCED_CLEAR_CACHE_INDEX];
+        if (BuildSettings.settingsScreenAllowBugReportingManually)
+        {
+            [sectionAdvanced addRowWithTag:ADVANCED_REPORT_BUG_INDEX];
+        }
+        
+        [tmpSections addObject:sectionAdvanced];
     }
-    if (BuildSettings.settingsScreenAllowChangingRageshakeSettings)
-    {
-        [sectionAdvanced addRowWithTag:ADVANCED_ENABLE_RAGESHAKE_INDEX];
-    }
-    [sectionAdvanced addRowWithTag:ADVANCED_MARK_ALL_AS_READ_INDEX];
-    [sectionAdvanced addRowWithTag:ADVANCED_CLEAR_CACHE_INDEX];
-    if (BuildSettings.settingsScreenAllowBugReportingManually)
-    {
-        [sectionAdvanced addRowWithTag:ADVANCED_REPORT_BUG_INDEX];
-    }
-    
-    [tmpSections addObject:sectionAdvanced];
     
     Section *sectionAbout = [Section sectionWithTag:SECTION_TAG_ABOUT];
     if (BuildSettings.applicationCopyrightUrlString.length)
@@ -587,6 +600,7 @@ SSOAuthenticationPresenterDelegate>
     }
     [sectionAbout addRowWithTag:ABOUT_THIRD_PARTY_INDEX];
     sectionAbout.headerTitle = VectorL10n.settingsAbout;
+    sectionAbout.footerTitle = @"Configured by IBM Consulting - based on Element";
 
     if (BuildSettings.settingsScreenShowAdvancedSettings)
     {        
@@ -607,10 +621,12 @@ SSOAuthenticationPresenterDelegate>
         }
         [sectionLabs addRowWithTag:LABS_ENABLE_NEW_SESSION_MANAGER];
         [sectionLabs addRowWithTag:LABS_ENABLE_NEW_CLIENT_INFO_FEATURE];
+% if config.capabilities.enable_rich_text_editor:
         if (@available(iOS 15.0, *))
         {
             [sectionLabs addRowWithTag:LABS_ENABLE_WYSIWYG_COMPOSER];
         }
+% end
         [sectionLabs addRowWithTag:LABS_ENABLE_VOICE_BROADCAST];
         sectionLabs.headerTitle = [VectorL10n settingsLabs];
         if (sectionLabs.hasAnyRows)
@@ -2556,6 +2572,8 @@ SSOAuthenticationPresenterDelegate>
 
             cell = labelAndSwitchCell;
         }
+% if config.capabilities.enable_rich_text_editor:
+
         else if (row == LABS_ENABLE_WYSIWYG_COMPOSER)
         {
             MXKTableViewCellWithLabelAndSwitch *labelAndSwitchCell = [self getLabelAndSwitchCell:tableView forIndexPath:indexPath];
@@ -2568,7 +2586,7 @@ SSOAuthenticationPresenterDelegate>
 
             cell = labelAndSwitchCell;
         }
-        
+% end
         else if (row == LABS_ENABLE_VOICE_BROADCAST)
         {
             MXKTableViewCellWithLabelAndSwitch *labelAndSwitchCell = [self getLabelAndSwitchCell:tableView forIndexPath:indexPath];
@@ -2596,6 +2614,18 @@ SSOAuthenticationPresenterDelegate>
                 cell.textLabel.text = [VectorL10n userSessionsSettings];
                 [cell vc_setAccessoryDisclosureIndicatorWithCurrentTheme];
                 break;
+            case SECURITY_SEND_READ_RECEIPTS: {
+                MXKTableViewCellWithLabelAndSwitch *labelAndSwitchCell = [self getLabelAndSwitchCell:tableView forIndexPath:indexPath];
+
+                labelAndSwitchCell.mxkLabel.text = [VectorL10n sendReadReceipts];
+                labelAndSwitchCell.mxkSwitch.on = RiotSettings.shared.sendReadReceipts;
+                labelAndSwitchCell.mxkSwitch.onTintColor = ThemeService.shared.theme.tintColor;
+
+                [labelAndSwitchCell.mxkSwitch addTarget:self action:@selector(toggleSendReadReceipts:) forControlEvents:UIControlEventTouchUpInside];
+
+                cell = labelAndSwitchCell;
+                break;
+            }
         }
     }
     else if (section == SECTION_TAG_DEACTIVATE_ACCOUNT)
@@ -3363,13 +3393,23 @@ SSOAuthenticationPresenterDelegate>
 
 - (void)toggleEnableWysiwygComposerFeature:(UISwitch *)sender
 {
+% if config.capabilities.enable_rich_text_editor:
     RiotSettings.shared.enableWysiwygComposer = sender.isOn;
+%end
 }
 
 - (void)toggleEnableVoiceBroadcastFeature:(UISwitch *)sender
 {
+% if config.capabilities.enable_voice_broadcasts:
     RiotSettings.shared.enableVoiceBroadcast = sender.isOn;
+% end
 }
+
+- (void)toggleSendReadReceipts:(UISwitch *)sender
+{
+    RiotSettings.shared.sendReadReceipts = sender.isOn;
+}
+
 
 - (void)togglePinRoomsWithMissedNotif:(UISwitch *)sender
 {
@@ -3939,10 +3979,10 @@ SSOAuthenticationPresenterDelegate>
             {
                 newTheme = @"dark";
             }
-            else if (action == blackAction)
-            {
-                newTheme = @"black";
-            }
+//            else if (action == blackAction)
+//            {
+//                newTheme = @"black";
+//            }
 
             NSString *theme = RiotSettings.shared.userInterfaceTheme;
             if (newTheme && ![newTheme isEqualToString:theme])
@@ -3987,9 +4027,9 @@ SSOAuthenticationPresenterDelegate>
     darkAction = [UIAlertAction actionWithTitle:[VectorL10n settingsUiThemeDark]
                                           style:UIAlertActionStyleDefault
                                         handler:actionBlock];
-    blackAction = [UIAlertAction actionWithTitle:[VectorL10n settingsUiThemeBlack]
-                                           style:UIAlertActionStyleDefault
-                                         handler:actionBlock];
+//    blackAction = [UIAlertAction actionWithTitle:[VectorL10n settingsUiThemeBlack]
+//                                           style:UIAlertActionStyleDefault
+//                                         handler:actionBlock];
 
 
     UIAlertController *themePicker = [UIAlertController alertControllerWithTitle:[VectorL10n settingsUiThemePickerTitle]
@@ -4002,7 +4042,7 @@ SSOAuthenticationPresenterDelegate>
     }
     [themePicker addAction:lightAction];
     [themePicker addAction:darkAction];
-    [themePicker addAction:blackAction];
+//    [themePicker addAction:blackAction];
 
     // Cancel button
     [themePicker addAction:[UIAlertAction actionWithTitle:[VectorL10n cancel]

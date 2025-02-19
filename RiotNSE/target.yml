@@ -75,7 +75,7 @@ targets:
         - "Controllers/**"
         - "Models/*List/**"
         - "Views/**"
-        
+        - "**/*.gyb"
     - path: ../Riot/Modules/Analytics
     - path: ../Riot/Managers/UserSessions
     - path: ../Riot/Managers/AppInfo/
@@ -84,4 +84,7 @@ targets:
     - path: ../Riot/Modules/Room/TimelineCells/Styles/RoomTimelineStyleIdentifier.swift
     - path: ../Riot/Modules/VoiceBroadcast/VoiceBroadcastSDK/MatrixSDK
     - path: ../Riot/Managers/Theme
+      excludes:
+        - "**/*.gyb"
     - path: ../Riot/Categories/UIColor.swift
+    - path: ../Riot/Utils/IBMAdditions.swift

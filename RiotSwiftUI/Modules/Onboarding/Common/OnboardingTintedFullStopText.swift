@@ -44,7 +44,7 @@ struct OnboardingTintedFullStopText: View {
     var body: some View {
         components.reduce(Text("")) { lastValue, component in
             lastValue + Text(component.string)
-                .foregroundColor(component.isColored ? theme.colors.accent : nil)
+                .foregroundColor(theme.isDark ? theme.colors.tertiaryContent : nil)
         }
     }
 }

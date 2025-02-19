@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // 
 // Copyright 2021 Vector Creations Ltd
 //
@@ -15,5 +21,5 @@
 //
 
 // Version
-MARKETING_VERSION = 1.11.21
+MARKETING_VERSION = ${config.settings.version}
 CURRENT_PROJECT_VERSION = 1.11.21

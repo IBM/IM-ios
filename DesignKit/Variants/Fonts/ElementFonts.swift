@@ -99,6 +99,10 @@ extension ElementFonts: Fonts {
         return SharedFont(uiFont: uiFont, font: .body.weight(.semibold))
     }
     
+    public var bodyOnboarding: UIFont {
+        return UIFont.systemFont(ofSize: 14)
+    }
+    
     public var callout: SharedFont {
         let uiFont = self.font(forTextStyle: .callout)
         return SharedFont(uiFont: uiFont, font: .callout)

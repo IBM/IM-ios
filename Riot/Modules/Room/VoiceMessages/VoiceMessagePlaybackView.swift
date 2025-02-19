@@ -131,12 +131,12 @@ class VoiceMessagePlaybackView: UIView, NibLoadable, Themable {
         playButton.backgroundColor = theme.roomCellIncomingBubbleBackgroundColor
         playButton.tintColor = theme.colors.secondaryContent
         
-        let backgroundViewColor = self.customBackgroundViewColor ?? theme.colors.quinaryContent
+        let backgroundViewColor = self.customBackgroundViewColor ?? theme.colors.tertiaryContent
         
         backgroundView.backgroundColor = backgroundViewColor
-        _waveformView.primaryLineColor =  theme.colors.quarterlyContent
+        _waveformView.primaryLineColor =  theme.colors.primaryContent
         _waveformView.secondaryLineColor = theme.colors.secondaryContent
-        elapsedTimeLabel.textColor = theme.colors.secondaryContent
+        elapsedTimeLabel.textColor = theme.colors.primaryContent
         elapsedTimeLabel.font = theme.fonts.body
     }
     

@@ -38,6 +38,7 @@ extension UITableViewCell {
     
     @objc func vc_setAccessoryDisclosureIndicator(withTheme theme: Theme) {
         self.vc_setAccessoryDisclosureIndicator(withTintColor: theme.textSecondaryColor)
+        self.detailTextLabel?.textColor=theme.textSecondaryColor
     }
     
     @objc func vc_setAccessoryDisclosureIndicatorWithCurrentTheme() {

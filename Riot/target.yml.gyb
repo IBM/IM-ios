@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 name: Riot
 
 schemes:
@@ -39,7 +45,9 @@ targets:
     # - target: RiotShareExtension
     # - target: SiriIntents
     - target: RiotNSE
+% if config.capabilities.enable_voice_broadcasts:
     - target: BroadcastUploadExtension
+% end
     - target: DesignKit
     - target: CommonKit
     - package: AnalyticsEvents
@@ -50,11 +58,15 @@ targets:
     - package: DeviceKit
     - package: DTCoreText
     - package: PostHog
+% if config.capabilities.app_connect:
+    - framework: ../../AppConnect.xcframework
+% end
 
     configFiles:
       Debug: Debug.xcconfig
       Release: Release.xcconfig
 
+% PODS_ROOT = '${PODS_ROOT}'
     preBuildScripts:
     - name: ⚠️ SwiftLint
       runOnlyWhenInstalling: false
@@ -78,19 +90,26 @@ targets:
       excludes:
       - "Common/Locale/LocaleProvider.swift"
       - "**/Test/**"
+      - "**/*.gyb"
     - path: ../Tools
       excludes:
         - "Logs"
         - "Release"
         - "Templates/*.sh"
+        - "**/*.rb"
     - path: ../Config
+      excludes:
+        - "**/*.gyb"
     - path: .
       excludes:
         - "Modules/Room/EmojiPicker/Data/EmojiMart/EmojiJSONStore.swift"
         - "Assets/ar.lproj/**" # RTL is broken so languages are disabled for now
         - "Assets/he.lproj/**"
         - "Assets/pr.lproj/**" # Unsupported language on iOS
+        - "**/*.gyb"
     - path: ../RiotShareExtension/Shared
     - path: Modules/MatrixKit
       excludes:
         - "**/*.md" # excludes all files with the .md extension
+        - "**/*.gyb"
+

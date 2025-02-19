@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2018-2024 New Vector Ltd.
 
@@ -38,6 +44,9 @@ final class RiotSettings: NSObject {
     
     private override init() {
         super.init()
+        if BuildSettings.ibm_show_reading_confirmation == false {
+            Self.defaults.removeObject(forKey: "ibm_sendReadReceipt")
+        }
     }
     
     /// Indicate if UserDefaults suite has been migrated once.
@@ -137,8 +146,7 @@ final class RiotSettings: NSObject {
     var enableRingingForGroupCalls
     
     /// Indicates if threads enabled in the timeline.
-    @UserDefault(key: "enableThreads", defaultValue: false, storage: defaults)
-    var enableThreads
+    var enableThreads = ${"true" if config.capabilities.enable_threads else "false"}
     
     /// Indicates if threads should be forced enabled in the timeline.
     @UserDefault(key: "forceThreadsEnabled", defaultValue: true, storage: defaults)
@@ -165,8 +173,12 @@ final class RiotSettings: NSObject {
     var enableClientInformationFeature
 
     /// Flag indicating if the wysiwyg composer feature is enabled
+% if config.capabilities.enable_rich_text_editor:
     @UserDefault(key: "enableWysiwygComposer", defaultValue: false, storage: defaults)
     var enableWysiwygComposer
+% else:
+    let enableWysiwygComposer = false
+% end
 
     @UserDefault(key: "enableWysiwygTextFormatting", defaultValue: true, storage: defaults)
     var enableWysiwygTextFormatting
@@ -176,8 +188,12 @@ final class RiotSettings: NSObject {
     var showIPAddressesInSessionsManager
     
     /// Flag indicating if the voice broadcast feature is enabled
+% if config.capabilities.enable_voice_broadcasts:
     @UserDefault(key: "enableVoiceBroadcast", defaultValue: false, storage: defaults)
     var enableVoiceBroadcast
+% else:
+    let enableVoiceBroadcast = false
+% end
     
     /// Flag indicating if we are using rust-based `MatrixCryptoSDK` instead of `MatrixSDK`'s internal crypto module
     @UserDefault(key: "enableCryptoSDK", defaultValue: false, storage: defaults)
@@ -376,8 +392,7 @@ final class RiotSettings: NSObject {
     @UserDefault(key: "hideSpaceBetaAnnounce", defaultValue: false, storage: defaults)
     var hideSpaceBetaAnnounce
 
-    @UserDefault(key: "threadsNoticeDisplayed", defaultValue: false, storage: defaults)
-    var threadsNoticeDisplayed
+    var threadsNoticeDisplayed = ${"true" if config.capabilities.enable_threads else "false"}
 
     // MARK: - Version check
     
@@ -392,6 +407,10 @@ final class RiotSettings: NSObject {
     /// Number of spaces previously tracked by the `AnalyticsSpaceTracker` instance.
     @UserDefault(key: "lastNumberOfTrackedSpaces", defaultValue: nil, storage: defaults)
     var lastNumberOfTrackedSpaces: Int?
+
+    // MARK: - IBM additions
+    @UserDefault(key: "ibm_sendReadReceipt", defaultValue: BuildSettings.ibm_enable_reading_confirmation, storage: defaults)
+    var sendReadReceipts
     
 }
 

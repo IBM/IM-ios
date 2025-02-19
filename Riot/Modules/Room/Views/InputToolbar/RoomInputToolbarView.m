@@ -95,7 +95,7 @@ static const NSTimeInterval kActionMenuComposerHeightAnimationDuration = .3;
     self.textView.font = [UIFont systemFontOfSize:15];
     self.textView.textColor = ThemeService.shared.theme.textPrimaryColor;
     self.textView.tintColor = ThemeService.shared.theme.tintColor;
-    self.textView.placeholderColor = ThemeService.shared.theme.textTertiaryColor;
+    self.textView.placeholderColor = ThemeService.shared.theme.placeholderTextColor;
     self.textView.showsVerticalScrollIndicator = NO;
 
     // Trigger textView redraw using proper color/font.
@@ -133,6 +133,10 @@ static const NSTimeInterval kActionMenuComposerHeightAnimationDuration = .3;
     self.inputContextLabel.textColor = ThemeService.shared.theme.textSecondaryColor;
     self.inputContextButton.tintColor = ThemeService.shared.theme.textSecondaryColor;
     [self.actionsBar updateWithTheme:ThemeService.shared.theme];
+    
+    [self.rightInputToolbarButton setBackgroundColor:ThemeService.shared.theme.colors.accent];
+    [self.rightInputToolbarButton setClipsToBounds:TRUE];
+    [self.rightInputToolbarButton.layer setCornerRadius:self.rightInputToolbarButton.bounds.size.height / 2];
 }
 
 #pragma mark -

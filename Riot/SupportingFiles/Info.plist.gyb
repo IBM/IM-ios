@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -49,19 +55,24 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>$(APPLICATION_SCHEME)</string>
+% if config.capabilities.app_connect:
+				<string>ac$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+% end
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-	<true/>
-	<key>ITSEncryptionExportComplianceCode</key>
-	<string>d1dd539c-d21c-43e2-92e2-212c5269565c</string>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>
 		<string>https</string>
+% if config.capabilities.app_connect:
+		<string>appconnect</string>
+		<string>alt-appconnect</string>
+% end
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -90,12 +101,21 @@
 	<string>Allow access to photos to upload photos and videos from your library.</string>
 	<key>NSSiriUsageDescription</key>
 	<string>Siri is used to perform calls even from the lock screen.</string>
+% if config.capabilities.app_connect:
+	<key>MI_AC_PROVIDE_SCREEN_BLUR</key>
+	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>AppConnect</string>
+% end
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
+% if config.capabilities.show_send_location:
 		<string>location</string>
+% end
 		<string>remote-notification</string>
+% if config.capabilities.enable_voip:
 		<string>voip</string>
+% end
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

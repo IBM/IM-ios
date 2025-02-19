@@ -89,31 +89,39 @@ extension UIViewController {
     @discardableResult
     @objc func vc_addFAB(withImage image: UIImage,
                          target: Any?,
-                         action: Selector?) -> UIImageView {
+                         action: Selector?) -> UIView {
         
+        let fabView = UIView()
+        fabView.translatesAutoresizingMaskIntoConstraints = false
+        fabView.clipsToBounds = false
+
         let fabImageView = UIImageView(image: image)
         fabImageView.translatesAutoresizingMaskIntoConstraints = false
-        fabImageView.backgroundColor = .clear
+        fabImageView.clipsToBounds = true
+        fabImageView.backgroundColor = ThemeService.shared().theme.colors.accent
         fabImageView.contentMode = .center
-        fabImageView.layer.shadowOpacity = 0.3
-        fabImageView.layer.shadowOffset = CGSize(width: 0, height: 3)
-        fabImageView.isUserInteractionEnabled = true
+        fabView.layer.shadowOpacity = 0.3
+        fabView.layer.shadowOffset = CGSize(width: 0, height: 3)
+        fabView.isUserInteractionEnabled = true
         
-        self.view.addSubview(fabImageView)
+        fabImageView.layer.cornerRadius = image.size.height / 2
+        fabView.addSubview(fabImageView)
         
-        fabImageView.widthAnchor.constraint(equalToConstant: UIViewControllerConstants.fabButtonSize.width).isActive = true
-        fabImageView.heightAnchor.constraint(equalToConstant: UIViewControllerConstants.fabButtonSize.height).isActive = true
-        fabImageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: UIViewControllerConstants.fabButtonTrailingMargin).isActive = true
-        self.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: fabImageView.bottomAnchor,
+        self.view.addSubview(fabView)
+        
+        fabView.widthAnchor.constraint(equalToConstant: UIViewControllerConstants.fabButtonSize.width).isActive = true
+        fabView.heightAnchor.constraint(equalToConstant: UIViewControllerConstants.fabButtonSize.height).isActive = true
+        fabView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                                          constant: UIViewControllerConstants.fabButtonTrailingMargin).isActive = true
+        self.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: fabView.bottomAnchor,
                                                               constant: UIViewControllerConstants.fabButtonBottomMargin).isActive = true
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: target, action: action)
         tapGestureRecognizer.numberOfTouchesRequired = 1
         tapGestureRecognizer.numberOfTapsRequired = 1
-        fabImageView.addGestureRecognizer(tapGestureRecognizer)
+        fabView.addGestureRecognizer(tapGestureRecognizer)
         
-        return fabImageView
+        return fabView
     }
     
     /// Defines the large title display mode for the view controller

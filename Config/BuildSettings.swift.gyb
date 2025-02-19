@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // 
 // Copyright 2024 New Vector Ltd.
 // Copyright 2020 Vector Creations Ltd
@@ -94,25 +100,21 @@ final class BuildSettings: NSObject {
     static let forceHomeserverSelection = false
 
     /// Default server proposed on the authentication screen
-    static var serverConfigDefaultHomeserverUrlString: String {
-        MDMSettings.serverConfigDefaultHomeserverUrlString ?? "https://matrix.org"
-    }
+    static let serverConfigDefaultHomeserverUrlString = "${config.connectivity.server}"
     
     /// Default identity server
-    static let serverConfigDefaultIdentityServerUrlString = "https://vector.im"
+    static let serverConfigDefaultIdentityServerUrlString = "${config.connectivity.server}"
         
-    static var serverConfigSygnalAPIUrlString: String {
-        MDMSettings.serverConfigSygnalAPIUrlString ?? "https://matrix.org/_matrix/push/v1/notify"
-    }
+    static let serverConfigSygnalAPIUrlString = "${config.settings.mobile.sygnal_url}"
+    
     
     // MARK: - Legal URLs
     
     // Note: Set empty strings to hide the related entry in application settings
-    static let applicationCopyrightUrlString = "https://element.io/copyright"
-    static let applicationPrivacyPolicyUrlString = "https://element.io/privacy"
-    static let applicationAcceptableUsePolicyUrlString = "https://element.io/acceptable-use-policy-terms"
-    static let applicationHelpUrlString =
-    "https://element.io/help"
+    static let applicationCopyrightUrlString = "${config.settings.copyright_url}"
+    static let applicationPrivacyPolicyUrlString = "${config.settings.privacy_url}"
+    static let applicationAcceptableUsePolicyUrlString = ""
+    static let applicationHelpUrlString = "${config.settings.help_url}"
     
     
     // MARK: - Permalinks
@@ -188,7 +190,7 @@ final class BuildSettings: NSObject {
                                                                termsURL: URL(string: "https://element.io/cookie-policy")!)
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
-    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: BuildSettings.baseBundleIdentifier.starts(with: "im.vector.app"),
+    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: false,
                                                                host: "https://posthog.element.io",
                                                                apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                                termsURL: URL(string: "https://element.io/cookie-policy")!)
@@ -232,15 +234,15 @@ final class BuildSettings: NSObject {
     
     static let allowSendingStickers: Bool = true
     
-    static let allowLocalContactsAccess: Bool = true
+    static let allowLocalContactsAccess: Bool = ${"true" if config.capabilities.enable_phone_contact_access else "false"}
     
-    static let allowInviteExernalUsers: Bool = true
+    static let allowInviteExernalUsers: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
     
     static let allowBackgroundAudioMessagePlayback: Bool = true
     
     // MARK: - Side Menu
     static let enableSideMenu: Bool = true && !newAppLayoutEnabled
-    static let sideMenuShowInviteFriends: Bool = true
+    static let sideMenuShowInviteFriends: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
 
     /// Whether to read the `io.element.functional_members` state event and exclude any service members when computing a room's name and avatar.
     static let supportFunctionalMembers: Bool = true
@@ -274,19 +276,19 @@ final class BuildSettings: NSObject {
     
     static let settingsScreenShowUserFirstName: Bool = false
     static let settingsScreenShowUserSurname: Bool = false
-    static let settingsScreenAllowAddingEmailThreepids: Bool = true
-    static let settingsScreenAllowAddingPhoneThreepids: Bool = true
-    static let settingsScreenShowThreepidExplanatory: Bool = true
+    static let settingsScreenAllowAddingEmailThreepids: Bool = ${"true" if config.capabilities.enable_setting_email else "false"}
+    static let settingsScreenAllowAddingPhoneThreepids: Bool = ${"true" if config.capabilities.enable_setting_phone_number else "false"}
+    static let settingsScreenShowThreepidExplanatory: Bool = ${"true" if config.capabilities.enable_setting_email or config.capabilities.enable_setting_phone_number else "false"}
     static let settingsScreenShowDiscoverySettings: Bool = true
-    static let settingsScreenAllowIdentityServerConfig: Bool = true
+    static let settingsScreenAllowIdentityServerConfig: Bool = ${"true" if config.capabilities.show_settings_identity_server else "false"}
     static let settingsScreenShowConfirmMediaSize: Bool = true
-    static let settingsScreenShowAdvancedSettings: Bool = true
-    static let settingsScreenShowLabSettings: Bool = true
-    static let settingsScreenAllowChangingRageshakeSettings: Bool = true
-    static let settingsScreenAllowChangingCrashUsageDataSettings: Bool = true
+    static let settingsScreenShowAdvancedSettings: Bool = ${"true" if config.capabilities.show_settings_advanced else "false"}
+    static let settingsScreenShowLabSettings: Bool = ${"true" if config.capabilities.show_settings_labor else "false"}
+    static let settingsScreenAllowChangingRageshakeSettings: Bool = ${"true" if config.capabilities.show_settings_bug_report else "false"}
+    static let settingsScreenAllowChangingCrashUsageDataSettings: Bool = ${"true" if config.capabilities.show_settings_bug_report else "false"}
     static let settingsScreenAllowBugReportingManually: Bool = true
-    static let settingsScreenAllowDeactivatingAccount: Bool = true
-    static let settingsScreenShowChangePassword:Bool = true
+    static let settingsScreenAllowDeactivatingAccount: Bool = ${"true" if config.capabilities.show_user_deactivation else "false"}
+    static let settingsScreenShowChangePassword:Bool = ${"true" if config.capabilities.enable_changing_password else "false"}
     static let settingsScreenShowEnableStunServerFallback: Bool = true
     static let settingsScreenShowNotificationDecodedContentOption: Bool = true
     static let settingsSecurityScreenShowSessions:Bool = true
@@ -295,7 +297,7 @@ final class BuildSettings: NSObject {
     static let settingsSecurityScreenShowDeleteBackup:Bool = true
     static let settingsSecurityScreenShowCryptographyInfo:Bool = true
     static let settingsSecurityScreenShowCryptographyExport:Bool = true
-    static let settingsSecurityScreenShowAdvancedUnverifiedDevices:Bool = true
+    static let settingsSecurityScreenShowAdvancedUnverifiedDevices:Bool = ${"true" if config.capabilities.show_settings_trusted_sources else "false"}
     /// A setting to enable the presence configuration settings section.
     static let settingsScreenPresenceAllowConfiguration: Bool = false
 
@@ -319,7 +321,7 @@ final class BuildSettings: NSObject {
     static let roomScreenAllowVoIPForNonDirectRoom: Bool = true
     static let roomScreenAllowCameraAction: Bool = true
     static let roomScreenAllowMediaLibraryAction: Bool = true
-    static let roomScreenAllowStickerAction: Bool = true
+    static let roomScreenAllowStickerAction: Bool = ${"true" if config.capabilities.show_sticker_button else "false"}
     static let roomScreenAllowFilesAction: Bool = true
     
     // Timeline style
@@ -341,7 +343,7 @@ final class BuildSettings: NSObject {
 
     // MARK: - Room Info Screen
     
-    static let roomInfoScreenShowIntegrations: Bool = true
+    static let roomInfoScreenShowIntegrations: Bool = ${"true" if config.capabilities.enable_integrations else "false"}
 
     // MARK: - Room Settings Screen
     
@@ -350,7 +352,7 @@ final class BuildSettings: NSObject {
     static let roomSettingsScreenAllowChangingAccessSettings: Bool = true
     static let roomSettingsScreenAllowChangingHistorySettings: Bool = true
     static let roomSettingsScreenShowAddressSettings: Bool = true
-    static let roomSettingsScreenShowAdvancedSettings: Bool = true
+    static let roomSettingsScreenShowAdvancedSettings: Bool = ${"true" if config.capabilities.show_settings_advanced else "false"}
     static let roomSettingsScreenAdvancedShowEncryptToVerifiedOption: Bool = true
 
     // MARK: - Room Member Screen
@@ -358,8 +360,8 @@ final class BuildSettings: NSObject {
     static let roomMemberScreenShowIgnore: Bool = true
 
     // MARK: - Message
-    static let messageDetailsAllowShare: Bool = true
-    static let messageDetailsAllowPermalink: Bool = true
+    static let messageDetailsAllowShare: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
+    static let messageDetailsAllowPermalink: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
     static let messageDetailsAllowViewSource: Bool = true
     static let messageDetailsAllowSave: Bool = true
     static let messageDetailsAllowCopyMedia: Bool = true
@@ -377,7 +379,7 @@ final class BuildSettings: NSObject {
     // MARK: - Authentication Screen
     static let authScreenShowRegister = true
     static let authScreenShowPhoneNumber = true
-    static let authScreenShowForgotPassword = true
+    static let authScreenShowForgotPassword = ${"true" if config.capabilities.enable_changing_password else "false"}
     static let authScreenShowCustomServerOptions = true
     static let authScreenShowSocialLoginSection = true
     
@@ -399,14 +401,14 @@ final class BuildSettings: NSObject {
     
     // MARK: - Polls
     
-    static let pollsEnabled = true
+    static let pollsEnabled = ${"true" if config.capabilities.enable_polls else "false"}
     
     // MARK: - Location Sharing
     
     /// Overwritten by the home server's .well-known configuration (if any exists)
     static let defaultTileServerMapStyleURL = URL(string: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx")!
     
-    static let locationSharingEnabled = true
+    static let locationSharingEnabled = ${"true" if config.capabilities.show_send_location else "false"}
     
     // MARK: - Voice Broadcast
     static let voiceBroadcastChunkLength: Int = 120
@@ -431,14 +433,30 @@ final class BuildSettings: NSObject {
     // MARK: - QR Login
     
     /// Flag indicating whether the QR login enabled from login screen
-    static let qrLoginEnabledFromNotAuthenticated = true
+    static let qrLoginEnabledFromNotAuthenticated = ${"true" if config.capabilities.enable_qr_login else "false"}
     /// Flag indicating whether the QR login enabled from Device Manager screen
-    static let qrLoginEnabledFromAuthenticated = false
+    static let qrLoginEnabledFromAuthenticated = ${"true" if config.capabilities.enable_qr_login else "false"}
     /// Flag indicating whether displaying QRs enabled for the QR login screens
-    static let qrLoginEnableDisplayingQRs = false
+    static let qrLoginEnableDisplayingQRs = ${"true" if config.capabilities.enable_qr_login else "false"}
     
     static let rendezvousServerBaseURL = URL(string: "https://rendezvous.lab.element.dev/")!
     
     // MARK: - Alerts
     static let showUnverifiedSessionsAlert = true
+}
+
+extension BuildSettings {
+    static let ibm_show_member_updates_in_rooms = ${"true" if config.capabilities.show_member_updates_in_rooms else "false"}
+    static let ibm_enable_voip = ${"true" if config.capabilities.enable_voip else "false"}
+    static let ibm_allow_integrations = ${"true" if config.capabilities.enable_integrations else "false"}
+    static let ibm_show_settings_bug_report: Bool = ${"true" if config.capabilities.show_settings_bug_report else "false"}
+    static let ibm_show_help_element_intro: Bool = ${"true" if config.capabilities.show_help_element_intro else "false"}
+    static let ibm_show_spaces = ${"true" if config.capabilities.show_spaces else "false"}
+    static let ibm_enable_rageshake = ${"true" if config.capabilities.show_settings_bug_report else "false"}
+    static let ibm_show_network_dropdown = ${"true" if config.capabilities.show_network_dropdown else "false"}
+    static let ibm_show_settings_timeline = ${"true" if config.capabilities.show_settings_timeline else "false"}
+    static let ibm_show_read_bubbles = true
+    static let ibm_show_reading_confirmation = ${"true" if config.capabilities.show_reading_confirmation else "false"}
+    static let ibm_enable_reading_confirmation = ${"true" if config.capabilities.enable_reading_confirmation else "false"}
+    static let ibm_show_homeserver_selection = ${"true" if config.settings.mobile.show_homeserver_selection else "false"}
 }

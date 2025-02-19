@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2018-2024 New Vector Ltd.
 
@@ -15,58 +21,51 @@ class DefaultTheme: NSObject, Theme {
 
     var identifier: String = ThemeIdentifier.light.rawValue
     
-    var backgroundColor: UIColor = UIColor(rgb: 0xFFFFFF)
+    var backgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
 
-    var baseColor: UIColor {
-        BuildSettings.newAppLayoutEnabled ? UIColor(rgb: 0xFFFFFF) : UIColor(rgb: 0xF5F7FA)
-    }
-    var baseIconPrimaryColor: UIColor = UIColor(rgb: 0xFFFFFF)
-    var baseTextPrimaryColor: UIColor = UIColor(rgb: 0xFFFFFF)
-    var baseTextSecondaryColor: UIColor = UIColor(rgb: 0x8F97A3)
+    var baseColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
+    var baseIconPrimaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
+    var baseTextPrimaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
+    var baseTextSecondaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
 
-    var searchBackgroundColor: UIColor = UIColor(rgb: 0xFFFFFF)
-    var searchPlaceholderColor: UIColor = UIColor(rgb: 0x8F97A3)
-    var searchResultHighlightColor: UIColor = UIColor(rgb: 0xFCC639).withAlphaComponent(0.2)
+    var searchBackgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
+    var searchPlaceholderColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
+    var searchResultHighlightColor: UIColor = UIColor(rgb: 0x${config.colors.dark.background_primary_color}).withAlphaComponent(0.3)
 
-    var headerBackgroundColor: UIColor {
-        BuildSettings.newAppLayoutEnabled ? UIColor(rgb: 0xFFFFFF) : UIColor(rgb: 0xF5F7FA)
-    }
-    var headerBorderColor: UIColor  = UIColor(rgb: 0xE9EDF1)
-    var headerTextPrimaryColor: UIColor = UIColor(rgb: 0x17191C)
-    var headerTextSecondaryColor: UIColor = UIColor(rgb: 0x737D8C)
+    var headerBackgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
+    var headerBorderColor: UIColor  = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
+    var headerTextPrimaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_primary_color})
+    var headerTextSecondaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_secondary_color})
 
-    var textPrimaryColor: UIColor = UIColor(rgb: 0x17191C)
-    var textSecondaryColor: UIColor = UIColor(rgb: 0x737D8C)
-    var textTertiaryColor: UIColor = UIColor(rgb: 0x8D99A5)
-    var textQuinaryColor: UIColor = UIColor(rgb: 0xE3E8F0)
+    var textPrimaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_primary_color})
+    var textSecondaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_secondary_color})
+    var textTertiaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_secondary_color})
+    var textQuinaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_secondary_color})
 
-    var tintColor: UIColor = UIColor(rgb: 0x0DBD8B)
-    var tintBackgroundColor: UIColor = UIColor(rgb: 0xe9fff9)
-    var tabBarUnselectedItemTintColor: UIColor = UIColor(rgb: 0xC1C6CD)
+    var tintColor: UIColor = UIColor(rgb: 0x${config.colors.light.accent_color})
+    var tintBackgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
+    var tabBarSelectedItemTintColor: UIColor = UIColor(rgb: 0x${config.colors.light.accent_color})
+    var tabBarUnselectedItemTintColor: UIColor = UIColor(rgb: 0x${config.colors.light.secondary_color})
     var unreadRoomIndentColor: UIColor = UIColor(rgb: 0x2E3648)
-    var lineBreakColor: UIColor = UIColor(rgb: 0xDDE4EE)        
+    var lineBreakColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})        
     
-    var noticeColor: UIColor = UIColor(rgb: 0xFF4B55)
-    var noticeSecondaryColor: UIColor = UIColor(rgb: 0x61708B)
+    var noticeColor: UIColor = UIColor(rgb: 0x${config.colors.light.alert_color})
+    var noticeSecondaryColor: UIColor = UIColor(rgb: 0x${config.colors.light.text_primary_color})
 
-    var warningColor: UIColor = UIColor(rgb: 0xFF4B55)
+    var warningColor: UIColor = UIColor(rgb: 0x${config.colors.light.alert_color})
     
-    var roomInputTextBorder: UIColor = UIColor(rgb: 0xE3E8F0)
+    var roomInputTextBorder: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
 
     var avatarColors: [UIColor] = [
-        UIColor(rgb: 0x03B381),
-        UIColor(rgb: 0x368BD6),
-        UIColor(rgb: 0xAC3BA8)]
+% for avatar_color in config.colors.avatar_colors:
+        UIColor(rgb: 0x${avatar_color}),
+% end
+    ]
     
     var userNameColors: [UIColor] = [
-        UIColor(rgb: 0x368BD6),
-        UIColor(rgb: 0xAC3BA8),
-        UIColor(rgb: 0x03B381),
-        UIColor(rgb: 0xE64F7A),
-        UIColor(rgb: 0xFF812D),
-        UIColor(rgb: 0x2DC2C5),
-        UIColor(rgb: 0x5C56F5),
-        UIColor(rgb: 0x74D12C)
+% for user_name_color in config.colors.user_name_colors:
+        UIColor(rgb: 0x${user_name_color}),
+% end
     ]
     
     var statusBarStyle: UIStatusBarStyle {
@@ -83,16 +82,16 @@ class DefaultTheme: NSObject, Theme {
         return .light
     }
 
-    var placeholderTextColor: UIColor = UIColor(rgb: 0x8F97A3) // Use secondary text color
+    var placeholderTextColor: UIColor = UIColor(rgb: 0x${config.colors.placeholder_text_color}) // Use secondary text color
     
-    var selectedBackgroundColor: UIColor = UIColor(rgb: 0xF5F7FA)
+    var selectedBackgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_selected_color})
     
-    var callScreenButtonTintColor: UIColor = UIColor(rgb: 0xFFFFFF)
+    var callScreenButtonTintColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_primary_color})
     
     var overlayBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.5)
-    var matrixSearchBackgroundImageTintColor: UIColor = UIColor(rgb: 0xE7E7E7)
+    var matrixSearchBackgroundImageTintColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
     
-    var secondaryCircleButtonBackgroundColor: UIColor = UIColor(rgb: 0xE3E8F0)
+    var secondaryCircleButtonBackgroundColor: UIColor = UIColor(rgb: 0x${config.colors.light.background_secondary_color})
     
     var shadowColor: UIColor = UIColor(rgb: 0x000000)
     

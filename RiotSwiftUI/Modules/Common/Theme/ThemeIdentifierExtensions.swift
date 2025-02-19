@@ -16,7 +16,7 @@ extension ThemeIdentifier {
         switch self {
         case .light:
             return Self.defaultTheme
-        case .dark, .black:
+        case .dark:
             return Self.darkTheme
         }
     }

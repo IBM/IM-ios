@@ -176,7 +176,7 @@ NSString *const RecentsViewControllerDataReadyNotification = @"RecentsViewContro
     }];
     
     self.recentsSearchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.recentsSearchBar.placeholder = [VectorL10n searchFilterPlaceholder];
+//    self.recentsSearchBar.placeholder = [VectorL10n searchFilterPlaceholder];
     [self.recentsSearchBar setImage:AssetImages.filterOff.image
                    forSearchBarIcon:UISearchBarIconSearch
                               state:UIControlStateNormal];

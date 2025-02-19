@@ -1806,7 +1806,9 @@ NSString *const AppDelegateUniversalLinkDidChangeNotification = @"AppDelegateUni
         else if (mxSession.state == MXSessionStateStoreDataReady)
         {
             //  start the call service
-            [self.callPresenter start];
+            if (BuildSettings.ibm_enable_voip) {
+                [self.callPresenter start];
+            }
             
             // Register to user new device sign in notification
             [self registerUserDidSignInOnNewDeviceNotificationForSession:mxSession];

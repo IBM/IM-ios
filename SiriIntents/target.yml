@@ -72,3 +72,4 @@ targets:
     - path: ../Riot/Modules/VoiceBroadcast/VoiceBroadcastSDK/MatrixSDK
     - path: ../Riot/Managers/Theme
     - path: ../Riot/Categories/UIColor.swift
+    - path: ../Riot/Utils/IBMAdditions.swift

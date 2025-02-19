@@ -98,7 +98,9 @@ static RageShakeManager* sharedInstance = nil;
 #pragma mark - MXKResponderRageShaking
 
 - (void)startShaking:(UIResponder*)responder {
-    
+    if (BuildSettings.ibm_enable_rageshake == false) {
+        return;
+    }
     // Start only if the application is in foreground
     // And if the rageshake user setting is enabled
     if ([AppDelegate theDelegate].isAppForeground
@@ -114,6 +116,9 @@ static RageShakeManager* sharedInstance = nil;
 
 - (void)stopShaking:(UIResponder*)responder
 {
+    if (BuildSettings.ibm_enable_rageshake == false) {
+        return;
+    }
     MXLogDebug(@"[RageShakeManager] Stop shaking with [%@]", [responder class]);
     
     if (isShaking && [AppDelegate theDelegate].isAppForeground && !confirmationAlert

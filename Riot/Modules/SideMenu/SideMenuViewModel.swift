@@ -105,10 +105,15 @@ final class SideMenuViewModel: SideMenuViewModelType {
             sideMenuItems += [.inviteFriends]
         }
         
-        sideMenuItems += [
-            .settings,
-            .feedback
-        ]
+        sideMenuItems.append(.settings)
+        
+        if BuildSettings.applicationHelpUrlString.isEmpty == false {
+            sideMenuItems.append(.help)
+        }
+        
+        if BuildSettings.ibm_show_settings_bug_report {
+            sideMenuItems.append(.feedback)
+        }
         
         // Hide app version
         let appVersion: String? = nil

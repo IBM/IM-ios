@@ -103,7 +103,7 @@ Please see LICENSE in the repository root for full details.
     {
         [ThemeService.shared.theme applyStyleOnNavigationBar:[AppDelegate theDelegate].masterTabBarController.navigationController.navigationBar];
 
-        [AppDelegate theDelegate].masterTabBarController.tabBar.tintColor = ThemeService.shared.theme.tintColor;
+        [AppDelegate theDelegate].masterTabBarController.tabBar.tintColor = ThemeService.shared.theme.tabBarSelectedItemTintColor;
     }
     
     if (recentsDataSource.recentsDataSourceMode != self.recentsDataSourceMode)
@@ -405,7 +405,7 @@ Please see LICENSE in the repository root for full details.
     
     if (editedRoomId)
     {
-        UIColor *selectedColor = ThemeService.shared.theme.tintColor;
+        UIColor *selectedColor = ThemeService.shared.theme.tabBarSelectedItemTintColor;
         UIColor *unselectedColor = ThemeService.shared.theme.tabBarUnselectedItemTintColor;
         
         // Disable collection scrolling during edition

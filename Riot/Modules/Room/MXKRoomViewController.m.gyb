@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C
@@ -1281,13 +1287,16 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
     NSString* kMXKSlashCmdPartRoom = [MXKSlashCommandsHelper commandNameFor:MXKSlashCommandPartRoom];
     NSString* kMXKSlashCmdChangeRoomTopic = [MXKSlashCommandsHelper commandNameFor:MXKSlashCommandChangeRoomTopic];
 
-    
+% if config.capabilities.enable_cmd_textEffects:
     if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandEmote]])
     {
         // send message as an emote
         [self sendTextMessage:string];
     }
-    else if ([string hasPrefix:kMXKSlashCmdChangeDisplayName])
+    else
+% end
+% if config.capabilities.enable_cmd_selfNickAvatar:
+    if ([string hasPrefix:kMXKSlashCmdChangeDisplayName])
     {
         // Change display name
         NSString *displayName;
@@ -1320,7 +1329,10 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
             cmdUsage = [MXKSlashCommandsHelper commandUsageFor:MXKSlashCommandChangeDisplayName];
         }
     }
-    else if ([string hasPrefix:kMXKSlashCmdJoinRoom])
+    else
+% end
+% if config.capabilities.enable_cmd_joinLeave:
+    if ([string hasPrefix:kMXKSlashCmdJoinRoom])
     {
         // Join a room
         NSString *roomAlias;
@@ -1413,7 +1425,10 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
             cmdUsage = [MXKSlashCommandsHelper commandUsageFor:MXKSlashCommandPartRoom];
         }
     }
-    else if ([string hasPrefix:kMXKSlashCmdChangeRoomTopic])
+    else 
+% end
+% if config.capabilities.enable_cmd_roomProps:
+    if ([string hasPrefix:kMXKSlashCmdChangeRoomTopic])
     {
         // Change topic
         NSString *topic;
@@ -1445,13 +1460,17 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
             cmdUsage = [MXKSlashCommandsHelper commandUsageFor:MXKSlashCommandChangeRoomTopic];
         }
     }
-    else if ([string hasPrefix:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandDiscardSession]])
+    else
+% end
+% if config.capabilities.enable_voip:
+    if ([string hasPrefix:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandDiscardSession]])
     {
         [roomDataSource.mxSession.crypto discardOutboundGroupSessionForRoomWithRoomId:roomDataSource.roomId onComplete:^{
             MXLogDebug(@"[MXKRoomVC] Manually discarded outbound group session");
         }];
     }
     else
+% end
     {
         // Retrieve userId
         NSString *userId = nil;
@@ -1466,7 +1485,7 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
             // reset
             userId = nil;
         }
-        
+% if config.capabilities.enable_cmd_userMgmt:
         if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandInviteUser]])
         {
             if (userId)
@@ -1524,7 +1543,10 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
                 cmdUsage = [MXKSlashCommandsHelper commandUsageFor:MXKSlashCommandKickUser];
             }
         }
-        else if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandBanUser]])
+        else
+% end
+% if config.capabilities.enable_cmd_ban:
+        if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandBanUser]])
         {
             if (userId)
             {
@@ -1581,7 +1603,10 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
                 cmdUsage = [MXKSlashCommandsHelper commandUsageFor:MXKSlashCommandUnbanUser];
             }
         }
-        else if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandSetUserPowerLevel]])
+        else
+% end
+% if config.capabilities.enable_cmd_userMgmt:
+        if ([cmd isEqualToString:[MXKSlashCommandsHelper commandNameFor:MXKSlashCommandSetUserPowerLevel]])
         {
             // Retrieve power level
             NSString *powerLevel = nil;
@@ -1640,6 +1665,7 @@ static const CGFloat kCellVisibilityMinimumHeight = 8.0;
             }
         }
         else
+% end
         {
             MXLogDebug(@"[MXKRoomVC] Unrecognised IRC-style command: %@", string);
 //            cmdUsage = [NSString stringWithFormat:@"Unrecognised IRC-style command: %@", cmd];

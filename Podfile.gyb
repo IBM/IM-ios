@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 source 'https://cdn.cocoapods.org/'
 
 # Uncomment this line to define a global platform for your project
@@ -80,13 +86,15 @@ abstract_target 'RiotPods' do
     import_MatrixKit_pods
   end
 
+% if config.capabilities.enable_voice_broadcasts:
   target "BroadcastUploadExtension" do
     import_MatrixSDK
   end
+% end
 
   # Disabled due to crypto corruption issues.
   # https://github.com/element-hq/element-ios/issues/7618
-  # target "RiotShareExtension" do
+  # target "RiotShareExtension" do
   #   import_MatrixSDK
   #   import_MatrixKit_pods
   # end
@@ -128,5 +136,27 @@ post_install do |installer|
       end
     end
 
+  end
+
+  # hack to get ancient FLEX to compile on modern toolchains
+  puts "fixing FLEX pod"
+  broken_file_in_flex = "#{installer.sandbox.root}/FLEX/Classes/GlobalStateExplorers/SystemLog/ActivityStreamAPI.h"
+  begin
+    text = File.read(broken_file_in_flex).gsub('#if !TARGET_OS_MACCATALYST', '#if !TARGET_OS_MACCATALYST && !__has_include(<xpc/xpc.h>)')
+    File.write(broken_file_in_flex, text)
+  rescue => e
+    if File.exist?(broken_file_in_flex)
+      puts "File #{broken_file_in_flex} exists."
+      puts "Readable: #{File.readable?(broken_file_in_flex)}"
+      puts "Writable: #{File.writable?(broken_file_in_flex)}"
+      puts "Executable: #{File.executable?(broken_file_in_flex)}"
+      puts "Owned by current user: #{File.owned?(broken_file_in_flex)}"
+      
+      permissions = File.stat(broken_file_in_flex).mode.to_s(8)[-3, 3]
+      puts "Permissions: #{permissions}"  # Outputs the octal permissions, e.g., "644"
+    else
+      puts "File #{broken_file_in_flex} does not exist."
+    end
+    raise StandardError, "cant fix the FLEX pod"
   end
 end

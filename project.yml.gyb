@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 name: Riot
 attributes:
   ORGANIZATIONNAME: matrix.org
@@ -30,7 +36,9 @@ include:
   - path: Riot/target.yml
   - path: RiotTests/target.yml
   - path: RiotNSE/target.yml
+% if config.capabilities.enable_voice_broadcasts:
   - path: BroadcastUploadExtension/target.yml
+% end 
   - path: DesignKit/target.yml
   - path: RiotSwiftUI/target.yml
   - path: RiotSwiftUI/targetUnitTests.yml

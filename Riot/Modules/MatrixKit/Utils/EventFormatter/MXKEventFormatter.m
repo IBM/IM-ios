@@ -324,6 +324,31 @@ static NSString *const kRepliedTextPattern = @"<mx-reply>.*<blockquote>.*<br>(.*
         return nil;
     }
     
+    if (BuildSettings.ibm_show_member_updates_in_rooms == false) {
+        if (event.type == kMXEventTypeStringRoomMember) {
+            if (event.isJoinLeave) {
+                return nil;
+            }
+            if (event.isProfileChange) {
+                return nil;
+            }
+        }
+    }
+    
+    if (BuildSettings.ibm_enable_voip == false) {
+        NSArray *callEvents = @[
+            kMXEventTypeStringCallInvite,
+            kMXEventTypeStringCallAnswer,
+            kMXEventTypeStringCallHangup,
+            kMXEventTypeStringCallReject,
+            kMXEventTypeStringCallNegotiate
+        ];
+        
+        if ([callEvents indexOfObject:event.type] != NSNotFound) {
+            return nil;
+        }
+    }
+    
     BOOL isEventSenderMyUser = [event.sender isEqualToString:mxSession.myUserId];
     
     // Check first whether the event has been redacted
@@ -381,6 +406,15 @@ static NSString *const kRepliedTextPattern = @"<mx-reply>.*<blockquote>.*<br>(.*
     NSString *senderDisplayName;
     senderDisplayName = roomState ? [self senderDisplayNameForEvent:event withRoomState:roomState] : event.sender;
     
+    if(BuildSettings.ibm_show_member_updates_in_rooms == false
+       && (event.eventType == MXEventTypeRoomMember || event.eventType == MXEventTypeRoomCreate ||
+           event.eventType == MXEventTypeRoomJoinRules || event.eventType == MXEventTypeRoomPowerLevels ||
+           event.eventType == MXEventTypeRoomHistoryVisibility )) {
+        // ibm_show_member_updates_in_rooms
+        return nil;
+    
+    } else {
+        
     switch (event.eventType)
     {
         case MXEventTypeRoomName:
@@ -1655,6 +1689,7 @@ static NSString *const kRepliedTextPattern = @"<mx-reply>.*<blockquote>.*<br>(.*
             *error = MXKEventFormatterErrorUnknownEventType;
             break;
     }
+}
 
     if (!attributedDisplayText && displayText)
     {

@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // 
 // Copyright 2022-2024 New Vector Ltd.
 //
@@ -540,7 +546,9 @@ class AllChatsViewController: HomeViewController {
         self.update(with: theme)
         
         self.toolbar.items = [
+% if config.capabilities.show_spaces:
             spacesButton,
+% end
             UIBarButtonItem.flexibleSpace(),
             UIBarButtonItem(image: Asset.Images.allChatsEditIcon.image, menu: menu)
         ]

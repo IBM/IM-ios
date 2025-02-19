@@ -1398,8 +1398,13 @@ static NSArray<NSNumber*> *initialSyncSilentErrorsHTTPStatusCodes;
 
     NSString *appId = [[NSUserDefaults standardUserDefaults] objectForKey:appIdKey];
     
-    NSMutableDictionary *pushData = [NSMutableDictionary dictionaryWithDictionary:@{@"url": self.pushGatewayURL}];
-    
+	NSMutableDictionary *pushData;
+	if (self.pushGatewayURL) {
+		pushData = [NSMutableDictionary dictionaryWithDictionary:@{@"url": self.pushGatewayURL}];
+	} else {
+		pushData = [NSMutableDictionary dictionaryWithDictionary:@{@"url": @""}];
+	}
+	
     NSDictionary *options = [MXKAccountManager sharedManager].pushOptions;
     if (options.count)
     {

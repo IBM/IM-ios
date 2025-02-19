@@ -303,13 +303,17 @@ class VoiceMessageToolbarView: PassthroughView, NibLoadable, Themable, UIGesture
             self.backgroundView.backgroundColor = theme.colors.background
             self.slideToCancelGradient.tintColor = theme.colors.background
             
-            self.primaryRecordButton.tintColor = theme.colors.tertiaryContent
+            self.secondaryRecordButton.backgroundColor = theme.colors.accent
+            self.secondaryRecordButton.layer.cornerRadius = self.secondaryRecordButton.bounds.height / 2
+            self.secondaryRecordButton.clipsToBounds = true
+            self.primaryRecordButton.tintColor = theme.placeholderTextColor
             self.slideToCancelLabel.textColor = theme.colors.secondaryContent
             self.slideToCancelChevron.tintColor = theme.colors.secondaryContent
             self.elapsedTimeLabel.textColor = theme.colors.secondaryContent
             
             self.lockContainerBackgroundView.backgroundColor = theme.colors.navigation
             self.lockButtonsContainerView.backgroundColor = theme.colors.navigation
+            self.secondaryLockButton.tintColor = theme.colors.accent
             
         } completion: { _ in
             switch details.state {

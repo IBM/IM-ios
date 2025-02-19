@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 //
 // Copyright 2024 New Vector Ltd.
 // Copyright 2020 Vector Creations Ltd
@@ -8,10 +14,29 @@
 
 import UIKit
 import PushKit
+% if config.capabilities.app_connect:
+import AppConnect
+import Combine
+% end
 
+% if config.capabilities.app_connect:
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate, AppConnectDelegate {
+% else:
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+% end
+
+% if config.capabilities.app_connect:
+    static func main() {
+        UIApplicationMain(
+          CommandLine.argc,
+          CommandLine.unsafeArgv,
+          ACUIApplicationClassName,
+          NSStringFromClass(AppDelegate.self)
+        )
+    }
+% end
     // MARK: - Properties
 
     // MARK: Private
@@ -45,8 +70,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         return self.legacyAppDelegate.application(application, willFinishLaunchingWithOptions: launchOptions)
     }
+
+% if config.capabilities.app_connect:
+    var appConnect: AppConnect?
+    var appConnectPromise: Future<Void, AppConnectError>.Promise = {_ in }
+    enum AppConnectError: Error {
+        case unauthorized
+        case retired
+        
+        var rawValue: ACAuthState {
+            switch self {
+            case .unauthorized:
+                return .unauthorized
+            case .retired:
+                return .retired
+            }
+        }
+    }
+
+    func appConnectIsReady(_ appConnect: AppConnect) {
+        switch appConnect.authState {
+        case .authorized:
+            appConnectPromise(.success(()))
+            
+        case .unauthorized:
+            appConnectPromise(.failure(.unauthorized))
+
+        case .retired:
+            appConnectPromise(.failure(.retired))
+            
+        @unknown default:
+            fatalError()
+        }
+    }
     
+    func appConnect(_ appConnect: AppConnect, authStateChangedTo newAuthState: ACAuthState, withMessage message: String?) {
+        
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        AppConnect.log(at: .status, message: "HelloAppConnect started")
+        AppConnect.initWith(self)
+        self.appConnect = AppConnect.sharedInstance()
+        
+        Future { promise in
+            self.appConnectPromise = promise
+            
+            self.appConnect?.start(launchOptions: launchOptions)
+        }.done {
+% else:
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+% end
+
+        MXRestClient.installPrivacy()
+        
         // Setup window
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
@@ -63,7 +140,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Call legacy AppDelegate
         self.legacyAppDelegate.window = window
         self.legacyAppDelegate.application(application, didFinishLaunchingWithOptions: launchOptions)
-        
+% if config.capabilities.app_connect:
+    }
+% end
         return true
     }
     

@@ -1,6 +1,16 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 //
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
+
+% if config.capabilities.app_connect:
+#import <AppConnect/AppConnect.h>
+% end
 
 @import MatrixSDK;
 @import DTCoreText;

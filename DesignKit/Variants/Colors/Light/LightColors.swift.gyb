@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // 
 // Copyright 2021-2024 New Vector Ltd.
 //
@@ -13,29 +19,24 @@ import SwiftUI
 /// Light theme colors.
 public class LightColors {
     private static let values = ColorValues(
-        accent: UIColor(rgb:0x0DBD8B),
-        alert: UIColor(rgb:0xFF4B55),
-        primaryContent: UIColor(rgb:0x17191C),
-        secondaryContent: UIColor(rgb:0x737D8C),
-        tertiaryContent: UIColor(rgb:0x8D97A5),
-        quarterlyContent: UIColor(rgb:0xC1C6CD),
-        quinaryContent: UIColor(rgb:0xE3E8F0),
-        separator: UIColor(rgb:0xE3E8F0),
-        system: UIColor(rgb:0xF4F6FA),
-        tile: UIColor(rgb:0xF3F8FD),
-        navigation: UIColor(rgb:0xF4F6FA),
-        background: UIColor(rgb:0xFFFFFF),
+        accent: UIColor(rgb:0x${config.colors.light.primary_color}),
+        alert: UIColor(rgb:0x${config.colors.light.alert_color}),
+        primaryContent: UIColor(rgb:0x${config.colors.light.text_primary_color}),
+        secondaryContent: UIColor(rgb:0x${config.colors.light.text_secondary_color}),
+        tertiaryContent: UIColor(rgb:0x${config.colors.light.secondary_color}),
+        quarterlyContent: UIColor(rgb:0x${config.colors.light.secondary_color}),
+        quinaryContent: UIColor(rgb:0x${config.colors.light.secondary_color}),
+        separator: UIColor(rgb:0x${config.colors.light.background_secondary_color}),
+        system: UIColor(rgb:0x${config.colors.light.background_secondary_color}),
+        tile: UIColor(rgb:0x${config.colors.light.background_secondary_color}),
+        navigation: UIColor(rgb:0x${config.colors.light.background_secondary_color}),
+        background: UIColor(rgb:0x${config.colors.light.background_primary_color}),
         ems: UIColor(rgb: 0x7E69FF),
         links: UIColor(rgb: 0x0086E6),
         namesAndAvatars: [
-            UIColor(rgb:0x368BD6),
-            UIColor(rgb:0xAC3BA8),
-            UIColor(rgb:0x03B381),
-            UIColor(rgb:0xE64F7A),
-            UIColor(rgb:0xFF812D),
-            UIColor(rgb:0x2DC2C5),
-            UIColor(rgb:0x5C56F5),
-            UIColor(rgb:0x74D12C)
+% for user_name_color in config.colors.avatar_colors:
+            UIColor(rgb: 0x${user_name_color}),
+% end
         ]
     )
     

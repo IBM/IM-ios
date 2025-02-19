@@ -12,7 +12,7 @@ Please see LICENSE in the repository root for full details.
 #import "MXKTools.h"
 @import MatrixSDK;
 
-
+#import "GeneratedInterface-Swift.h"
 // get ISO country name
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -115,7 +115,7 @@ static NSString *const kMXAppGroupID = @"group.org.matrix";
         
         _allowPushKitPushers = NO;
         _notificationBodyLocalizationKey = @"MESSAGE";
-        enableCallKit = YES;
+        enableCallKit = BuildSettings.ibm_enable_voip;
         
         eventsFilterForMessages = @[
             kMXEventTypeStringRoomCreate,

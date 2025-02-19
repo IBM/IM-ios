@@ -289,6 +289,14 @@ const CGFloat kTypingCellHeight = 24;
 
 - (BOOL)shouldQueueEventForProcessing:(MXEvent *)event roomState:(MXRoomState *)roomState direction:(MXTimelineDirection)direction
 {
+    if (BuildSettings.ibm_show_member_updates_in_rooms == false) {
+        if (event.type == kMXEventTypeStringRoomMember) {
+            return NO;
+        }
+    }
+    
+//    NSLog(@"[XXX] not filtered event of type: %@", event.type);
+    
     if (self.threadId)
     {
         //  if in a thread, ignore non-root event or events from other threads

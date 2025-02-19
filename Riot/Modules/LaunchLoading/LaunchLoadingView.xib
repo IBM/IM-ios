@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,10 +14,15 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleAspectFit" placeholderIntrinsicWidth="130" placeholderIntrinsicHeight="130" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3KG-IR-FPV" customClass="ElementView" customModule="Element" customModuleProvider="target">
-                    <rect key="frame" x="95" y="219" width="130" height="130"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backdrop" translatesAutoresizingMaskIntoConstraints="NO" id="dMV-uc-5n6">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+                <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="fKu-zN-cmV">
+                    <rect key="frame" x="100" y="66.5" width="120" height="151.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" priority="750" constant="200" id="sxv-o8-Tl7"/>
+                    </constraints>
+                </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="hme-ss-nFP">
                     <rect key="frame" x="20" y="472" width="280" height="36"/>
                     <subviews>
@@ -32,35 +37,40 @@
                             <color key="tintColor" red="0.050980392156862744" green="0.74117647058823533" blue="0.54509803921568623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </progressView>
                     </subviews>
-                    <constraints>
-                        <constraint firstAttribute="width" priority="750" constant="350" id="hle-Py-f0J"/>
-                    </constraints>
                 </stackView>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="typo" translatesAutoresizingMaskIntoConstraints="NO" id="MfY-Gb-ght">
+                    <rect key="frame" x="64" y="308.5" width="192" height="163.5"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="fKu-zN-cmV" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="0.5" id="49s-cF-MmL"/>
                 <constraint firstAttribute="bottom" secondItem="hme-ss-nFP" secondAttribute="bottom" constant="60" id="Ayr-Nh-R8M"/>
                 <constraint firstItem="hme-ss-nFP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="Ecw-cR-GaE"/>
+                <constraint firstAttribute="bottom" secondItem="dMV-uc-5n6" secondAttribute="bottom" id="EmE-wa-00m"/>
+                <constraint firstItem="dMV-uc-5n6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="FcN-R5-97U"/>
                 <constraint firstItem="hme-ss-nFP" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KSs-HF-BlI"/>
+                <constraint firstAttribute="trailing" secondItem="MfY-Gb-ght" secondAttribute="trailing" constant="64" id="MKo-ip-tU5"/>
+                <constraint firstItem="hme-ss-nFP" firstAttribute="top" secondItem="MfY-Gb-ght" secondAttribute="bottom" id="Oz9-Wk-8un"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hme-ss-nFP" secondAttribute="trailing" constant="20" id="U6l-o1-IL3"/>
-                <constraint firstItem="3KG-IR-FPV" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ig4-YX-FoT"/>
-                <constraint firstItem="3KG-IR-FPV" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="r9K-7c-fjh"/>
+                <constraint firstItem="fKu-zN-cmV" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="VGQ-eo-FZg"/>
+                <constraint firstItem="MfY-Gb-ght" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="64" id="acg-sJ-8Fg"/>
+                <constraint firstItem="dMV-uc-5n6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="dhR-Ge-ZXG"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fKu-zN-cmV" secondAttribute="trailing" constant="100" id="gre-Tt-Jnd"/>
+                <constraint firstAttribute="trailing" secondItem="dMV-uc-5n6" secondAttribute="trailing" id="rza-a0-Urc"/>
             </constraints>
             <connections>
-                <outlet property="animationView" destination="3KG-IR-FPV" id="Are-fn-laY"/>
                 <outlet property="progressContainer" destination="hme-ss-nFP" id="XC1-4m-OD7"/>
                 <outlet property="progressView" destination="DEk-Va-xdT" id="PCI-Vi-Zyg"/>
                 <outlet property="statusLabel" destination="wzS-bN-Pht" id="Mj2-rn-i5x"/>
             </connections>
-            <point key="canvasLocation" x="136.875" y="132.5"/>
+            <point key="canvasLocation" x="136.23188405797103" y="131.91964285714286"/>
         </view>
     </objects>
-    <designables>
-        <designable name="3KG-IR-FPV">
-            <size key="intrinsicContentSize" width="130" height="130"/>
-        </designable>
-    </designables>
     <resources>
+        <image name="backdrop" width="1440.5" height="2960"/>
+        <image name="logo" width="196.5" height="151.5"/>
+        <image name="typo" width="670" height="163.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

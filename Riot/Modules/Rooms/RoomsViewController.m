@@ -58,7 +58,7 @@ Please see LICENSE in the repository root for full details.
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [AppDelegate theDelegate].masterTabBarController.tabBar.tintColor = ThemeService.shared.theme.tintColor;
+    [AppDelegate theDelegate].masterTabBarController.tabBar.tintColor = ThemeService.shared.theme.tabBarSelectedItemTintColor;
     
     if ([self.dataSource isKindOfClass:RecentsDataSource.class])
     {

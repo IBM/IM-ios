@@ -7235,6 +7235,10 @@ public class VectorL10n: NSObject {
   public static var send: String { 
     return VectorL10n.tr("Vector", "send") 
   }
+  /// Send read receipts
+  public static var sendReadReceipts: String { 
+    return VectorL10n.tr("Vector", "send_read_receipts") 
+  }
   /// Send to %@
   public static func sendTo(_ p1: String) -> String {
     return VectorL10n.tr("Vector", "send_to", p1)

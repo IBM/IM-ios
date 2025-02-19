@@ -40,8 +40,8 @@ import AnalyticsEvents
     
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
-        // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        !RiotSettings.shared.hasSeenAnalyticsPrompt && BuildSettings.analyticsConfiguration.isEnabled
+        // Only show the prompt once, and when analytics are configured in BuildSettings.
+        !RiotSettings.shared.hasSeenAnalyticsPrompt && BuildSettings.analyticsConfiguration.isEnabled && BuildSettings.ibm_show_help_element_intro
     }
     
     /// Indicates whether the user previously accepted Matomo analytics and should be shown the upgrade prompt.
@@ -80,6 +80,7 @@ import AnalyticsEvents
     /// - Parameter session: An optional session to use to when reading/generating the analytics ID.
     ///  The session will be ignored if not running.
     func optIn(with session: MXSession?) {
+        guard BuildSettings.ibm_show_help_element_intro else { return }
         RiotSettings.shared.enableAnalytics = true
         startIfEnabled()
         
@@ -104,6 +105,7 @@ import AnalyticsEvents
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
     func startIfEnabled() {
+        guard BuildSettings.ibm_show_help_element_intro else { return }
         guard RiotSettings.shared.enableAnalytics, !isRunning else { return }
         
         client.start()

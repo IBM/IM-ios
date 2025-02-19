@@ -77,23 +77,23 @@ class ThreadViewController: RoomViewController {
                                                                                   eventId: self.threadId)
                                              })
         alertController.addAction(viewInRoomAction)
-        
-        let copyLinkAction = UIAlertAction(title: VectorL10n.threadCopyLinkToThread,
-                                           style: .default,
-                                           handler: { [weak self] action in
-                                            guard let self = self else { return }
-                                            self.copyPermalink()
-                                           })
-        alertController.addAction(copyLinkAction)
-        
-        let shareAction = UIAlertAction(title: VectorL10n.roomEventActionShare,
-                                        style: .default,
-                                        handler: { [weak self] action in
-                                            guard let self = self else { return }
-                                            self.sharePermalink()
-                                        })
-        alertController.addAction(shareAction)
-        
+        if (BuildSettings.messageDetailsAllowShare) {
+            let copyLinkAction = UIAlertAction(title: VectorL10n.threadCopyLinkToThread,
+                                               style: .default,
+                                               handler: { [weak self] action in
+                                                guard let self = self else { return }
+                                                self.copyPermalink()
+                                               })
+            alertController.addAction(copyLinkAction)
+            
+            let shareAction = UIAlertAction(title: VectorL10n.roomEventActionShare,
+                                            style: .default,
+                                            handler: { [weak self] action in
+                                                guard let self = self else { return }
+                                                self.sharePermalink()
+                                            })
+            alertController.addAction(shareAction)
+        }
         alertController.addAction(UIAlertAction(title: VectorL10n.cancel,
                                                 style: .cancel,
                                                 handler: nil))

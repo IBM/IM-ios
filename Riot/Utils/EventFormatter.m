@@ -283,7 +283,9 @@ static NSString *const kEventFormatterTimeFormat = @"HH:mm";
                                                            andLatestRoomState:latestRoomState
                                                                         error:error];
                 NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:@"· "];
-                [result appendAttributedString:string];
+                if (string != nil) {
+                    [result appendAttributedString:string];
+                }
                 return result;
             }
         }
@@ -404,7 +406,9 @@ static NSString *const kEventFormatterTimeFormat = @"HH:mm";
 
             NSAttributedString *rendered = [self renderString:displayText forEvent:roomCreateEvent];
             NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:@"· "];
-            [result appendAttributedString:rendered];
+            if (rendered != nil) {
+                [result appendAttributedString:rendered];
+            }
             [result setAttributes:@{
                 NSFontAttributeName: [UIFont systemFontOfSize:13],
                 NSForegroundColorAttributeName: ThemeService.shared.theme.textSecondaryColor

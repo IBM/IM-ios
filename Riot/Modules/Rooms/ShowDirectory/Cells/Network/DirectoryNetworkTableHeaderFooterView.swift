@@ -30,6 +30,7 @@ class DirectoryNetworkTableHeaderFooterView: UITableViewHeaderFooterView {
 
     func configure(withViewModel viewModel: DirectoryNetworkVM) {
         titleLabel.text = viewModel.title
+        switchButton.isHidden = !BuildSettings.ibm_show_network_dropdown
     }
     
     @IBAction private func switchButtonTapped(_ sender: UIButton) {

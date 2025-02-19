@@ -134,7 +134,7 @@ static const CGFloat kAuthInputContainerViewMinHeightConstraintConstant = 150.0;
     
     self.defaultIdentityServerUrl = RiotSettings.shared.identityServerUrlString;
     
-    self.welcomeImageView.image = AssetSharedImages.horizontalLogo.image;
+    self.welcomeImageView.image = AssetImages.logo.image;
     
     [self.submitButton.layer setCornerRadius:5];
     self.submitButton.clipsToBounds = YES;

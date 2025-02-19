@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // 
 // Copyright 2023, 2024 New Vector Ltd.
 //
@@ -16,45 +22,73 @@
 }
 
 @objc enum MXKSlashCommand: Int, CaseIterable {
+% if config.capabilities.enable_cmd_selfNickAvatar:
     case changeDisplayName
+% end
+% if config.capabilities.enable_cmd_textEffects:
     case emote
+% end
+% if config.capabilities.enable_cmd_joinLeave:
     case joinRoom
     case partRoom
-    case inviteUser
-    case kickUser
+% end
+% if config.capabilities.enable_cmd_ban:
     case banUser
     case unbanUser
+% end
+% if config.capabilities.enable_cmd_userMgmt:
+    case inviteUser
+    case kickUser
     case setUserPowerLevel
     case resetUserPowerLevel
+% end
+% if config.capabilities.enable_cmd_roomProps:
     case changeRoomTopic
+% end
+% if config.capabilities.enable_voip:
     case discardSession
+% end
 
     var cmd: String {
         switch self {
+% if config.capabilities.enable_cmd_selfNickAvatar:
         case .changeDisplayName:
             return "/nick"
+% end
+% if config.capabilities.enable_cmd_textEffects:
         case .emote:
             return "/me"
+% end
+% if config.capabilities.enable_cmd_joinLeave:
         case .joinRoom:
             return "/join"
         case .partRoom:
             return "/part"
-        case .inviteUser:
-            return "/invite"
-        case .kickUser:
-            return "/kick"
+% end
+% if config.capabilities.enable_cmd_ban:
         case .banUser:
             return "/ban"
         case .unbanUser:
             return "/unban"
+% end
+% if config.capabilities.enable_cmd_userMgmt:
+        case .inviteUser:
+            return "/invite"
+        case .kickUser:
+            return "/kick"
         case .setUserPowerLevel:
             return "/op"
         case .resetUserPowerLevel:
             return "/deop"
+% end
+% if config.capabilities.enable_cmd_roomProps:
         case .changeRoomTopic:
             return "/topic"
+% end
+% if config.capabilities.enable_voip:
         case .discardSession:
             return "/discardsession"
+% end
         }
     }
 
@@ -63,30 +97,44 @@
     // the UI in case of languages with overlength translation.
     var parametersFormat: String {
         switch self {
+% if config.capabilities.enable_cmd_selfNickAvatar:
         case .changeDisplayName:
             return "<display_name>"
+% end
+% if config.capabilities.enable_cmd_textEffects:
         case .emote:
             return "<message>"
+% end
+% if config.capabilities.enable_cmd_joinLeave:
         case .joinRoom:
             return "<room-address>"
         case .partRoom:
             return "[<room-address>]"
-        case .inviteUser:
-            return "<user-id>"
-        case .kickUser:
-            return "<user-id> [<reason>]"
+% end
+% if config.capabilities.enable_cmd_ban:
         case .banUser:
             return "<user-id> [<reason>]"
         case .unbanUser:
             return "<user-id>"
+% end
+% if config.capabilities.enable_cmd_userMgmt:
+        case .inviteUser:
+            return "<user-id>"
+        case .kickUser:
+            return "<user-id> [<reason>]"
         case .setUserPowerLevel:
             return "<user-id> <power-level>"
         case .resetUserPowerLevel:
             return "<user-id>"
+% end
+% if config.capabilities.enable_cmd_roomProps:
         case .changeRoomTopic:
             return "<topic>"
+% end
+% if config.capabilities.enable_voip:
         case .discardSession:
             return ""
+% end
         }
     }
 }

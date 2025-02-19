@@ -72,6 +72,7 @@ Please see LICENSE in the repository root for full details.
             }
             
             self.iconImage.image = [self attachmentIcon:bubbleData.attachment.type];
+            self.iconImage.tintColor = ThemeService.shared.theme.colors.accent;
             
             // Disable any interactions defined in the cell
             // because we want [tableView didSelectRowAtIndexPath:] to be called

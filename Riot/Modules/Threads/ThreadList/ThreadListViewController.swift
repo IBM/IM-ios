@@ -236,21 +236,21 @@ final class ThreadListViewController: UIViewController {
                                             guard let self = self else { return }
                                             self.viewModel.process(viewAction: .actionViewInRoom)
                                            }))
-        
-        controller.addAction(UIAlertAction(title: VectorL10n.threadCopyLinkToThread,
-                                           style: .default,
-                                           handler: { [weak self] action in
-                                            guard let self = self else { return }
-                                            self.viewModel.process(viewAction: .actionCopyLinkToThread)
-                                           }))
-        
-        controller.addAction(UIAlertAction(title: VectorL10n.roomEventActionShare,
-                                           style: .default,
-                                           handler: { [weak self] action in
-                                            guard let self = self else { return }
-                                            self.viewModel.process(viewAction: .actionShare)
-                                           }))
-        
+        if (BuildSettings.messageDetailsAllowShare) {
+            controller.addAction(UIAlertAction(title: VectorL10n.threadCopyLinkToThread,
+                                               style: .default,
+                                               handler: { [weak self] action in
+                                                guard let self = self else { return }
+                                                self.viewModel.process(viewAction: .actionCopyLinkToThread)
+                                               }))
+            
+            controller.addAction(UIAlertAction(title: VectorL10n.roomEventActionShare,
+                                               style: .default,
+                                               handler: { [weak self] action in
+                                                guard let self = self else { return }
+                                                self.viewModel.process(viewAction: .actionShare)
+                                               }))
+        }
         controller.addAction(UIAlertAction(title: VectorL10n.cancel,
                                            style: .cancel,
                                            handler: nil))

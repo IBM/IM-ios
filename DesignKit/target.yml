@@ -30,4 +30,6 @@ targets:
 
     sources:
       - path: .
+        excludes:
+        - "**/*.gyb"
       - path: ../Riot/Categories/UIColor.swift

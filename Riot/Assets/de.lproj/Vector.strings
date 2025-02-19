@@ -2781,3 +2781,6 @@
 "settings_manage_account_action" = "Konto verwalten";
 "manage_session_redirect" = "Du wirst zum Authentifizierungsdienst deines Servers weitergeleitet, um das Abmelden abzuschließen.";
 "manage_session_redirect_error" = "Funktion aktuell nicht verfügbar. Bitte kontaktiere deine Home-Server-Administration";
+
+// IBM
+"send_read_receipts" = "Sende Lesebestätigungen";

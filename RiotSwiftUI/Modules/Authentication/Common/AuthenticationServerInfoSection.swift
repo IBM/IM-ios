@@ -37,14 +37,16 @@ struct AuthenticationServerInfoSection: View {
                     .font(theme.fonts.body)
                     .foregroundColor(theme.colors.primaryContent)
                 
-                Spacer()
-                
-                Button(action: editAction) {
-                    Text(VectorL10n.edit)
-                        .font(theme.fonts.body)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.colors.accent))
+                if BuildSettings.ibm_show_homeserver_selection {
+                    Spacer()
+                    
+                    Button(action: editAction) {
+                        Text(VectorL10n.edit)
+                            .font(theme.fonts.body)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.colors.accent))
+                    }
                 }
             }
         }

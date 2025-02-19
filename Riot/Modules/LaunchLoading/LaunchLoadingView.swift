@@ -42,6 +42,7 @@ final class LaunchLoadingView: UIView, NibLoadable, Themable {
     }
     
     override func awakeFromNib() {
+        /*
         super.awakeFromNib()
         
         let animationTimeline = Timeline_1(view: self.animationView, duration: LaunchAnimation.duration, repeatCount: LaunchAnimation.repeatCount)
@@ -49,13 +50,14 @@ final class LaunchLoadingView: UIView, NibLoadable, Themable {
         self.animationTimeline = animationTimeline
         
         progressContainer.isHidden = true
+        */
     }
     
     // MARK: - Public
     
     func update(theme: Theme) {
-        self.backgroundColor = theme.backgroundColor
-        self.animationView.backgroundColor = theme.backgroundColor
+        // self.backgroundColor = theme.backgroundColor
+//        self.animationView.backgroundColor = theme.backgroundColor
     }
 }
 

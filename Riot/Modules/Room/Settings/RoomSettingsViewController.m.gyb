@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2024 New Vector Ltd.
 Copyright 2017 Vector Creations Ltd
@@ -542,7 +548,10 @@ NSString *const kRoomSettingsAdvancedE2eEnabledCellViewIdentifier = @"kRoomSetti
             Section *promotionAccess = [Section sectionWithTag:SECTION_TAG_PROMOTION];
             promotionAccess.headerTitle = VectorL10n.roomDetailsPromoteRoomTitle;
             [promotionAccess addRowWithTag:ROOM_SETTINGS_ROOM_ACCESS_DIRECTORY_VISIBILITY];
+% if config.capabilities.show_spaces:
+
             [promotionAccess addRowWithTag:ROOM_SETTINGS_ROOM_PROMOTE_SECTION_ROW_SUGGEST];
+% end
             [tmpSections addObject:promotionAccess];
         }
     }

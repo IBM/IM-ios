@@ -29,12 +29,12 @@ class RoomDisplayConfiguration: NSObject {
         super.init()
     }
     
-    static let `default`: RoomDisplayConfiguration = RoomDisplayConfiguration(callsEnabled: true,
+    static let `default`: RoomDisplayConfiguration = RoomDisplayConfiguration(callsEnabled: true && BuildSettings.ibm_enable_voip,
                                                                               integrationsEnabled: true,
                                                                               jitsiWidgetRemoverEnabled: true,
                                                                               sendingPollsEnabled: true)
     
-    static let forThreads: RoomDisplayConfiguration = RoomDisplayConfiguration(callsEnabled: false,
+    static let forThreads: RoomDisplayConfiguration = RoomDisplayConfiguration(callsEnabled: false && BuildSettings.ibm_enable_voip,
                                                                                integrationsEnabled: false,
                                                                                jitsiWidgetRemoverEnabled: false,
                                                                                sendingPollsEnabled: false)

@@ -54,7 +54,7 @@ class FindYourContactsFooterView: UIView, NibLoadable, Themable {
     func update(theme: Theme) {
         tintColor = theme.colors.accent
         
-        containerView.backgroundColor = theme.colors.quinaryContent
+        containerView.backgroundColor = theme.colors.navigation
         
         titleLabel.font = theme.fonts.bodySB
         titleLabel.textColor = theme.colors.primaryContent

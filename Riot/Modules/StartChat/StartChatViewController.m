@@ -113,7 +113,12 @@ Please see LICENSE in the repository root for full details.
     createBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[VectorL10n start] style:UIBarButtonItemStylePlain target:self action:@selector(onButtonPressed:)];
     self.navigationItem.rightBarButtonItem = createBarButtonItem;
     
-    _searchBarView.placeholder = [VectorL10n roomCreationInviteAnotherUser];
+    if (@available(iOS 13.0, *)) {
+        _searchBarView.searchTextField.attributedPlaceholder =  [[NSAttributedString alloc] initWithString:[VectorL10n roomCreationInviteAnotherUser] attributes: @{NSForegroundColorAttributeName: ThemeService.shared.theme.placeholderTextColor}];
+        _searchBarView.searchTextField.textColor = ThemeService.shared.theme.textPrimaryColor;
+    } else {
+        // TODO if those 3% Fallback on earlier versions
+    }
     _searchBarView.returnKeyType = UIReturnKeyDone;
     _searchBarView.autocapitalizationType = UITextAutocapitalizationTypeNone;    
     [self refreshSearchBarItemsColor:_searchBarView];
@@ -802,13 +807,13 @@ Please see LICENSE in the repository root for full details.
 - (void)refreshSearchBarItemsColor:(UISearchBar *)searchBar
 {
     // bar tint color
-    searchBar.barTintColor = searchBar.tintColor = ThemeService.shared.theme.tintColor;
+//    searchBar.barTintColor = searchBar.tintColor = ThemeService.shared.theme.tintColor;
     
     // FIXME: this all seems incredibly fragile and tied to gutwrenching the current UISearchBar internals.
 
     // text color
     UITextField *searchBarTextField = searchBar.vc_searchTextField;
-    searchBarTextField.textColor = ThemeService.shared.theme.textSecondaryColor;
+//    searchBarTextField.textColor = ThemeService.shared.theme.textSecondaryColor;
     
     // Magnifying glass icon.
     UIImageView *leftImageView = (UIImageView *)searchBarTextField.leftView;
@@ -818,11 +823,11 @@ Please see LICENSE in the repository root for full details.
     // Use the theme's grey color.
     // The effect views are needed due to minimal style.
     // With default style there is a border above the search bar.
-    searchBarTextField.backgroundColor = ThemeService.shared.theme.textQuinaryColor;
-    UIView *effectBackgroundTop = [searchBarTextField valueForKey:@"_effectBackgroundTop"];
-    UIView *effectBackgroundBottom = [searchBarTextField valueForKey:@"_effectBackgroundBottom"];
-    effectBackgroundTop.hidden = YES;
-    effectBackgroundBottom.hidden = YES;
+//    searchBarTextField.backgroundColor = ThemeService.shared.theme.textQuinaryColor;
+//    UIView *effectBackgroundTop = [searchBarTextField valueForKey:@"_effectBackgroundTop"];
+//    UIView *effectBackgroundBottom = [searchBarTextField valueForKey:@"_effectBackgroundBottom"];
+//    effectBackgroundTop.hidden = YES;
+//    effectBackgroundBottom.hidden = YES;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText

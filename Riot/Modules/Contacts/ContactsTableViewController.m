@@ -64,7 +64,7 @@ Please see LICENSE in the repository root for full details.
     
     // By default, allow the find your contacts footer to be
     // shown when local contacts sync hasn't been enabled.
-    self.disableFindYourContactsFooter = NO;
+    self.disableFindYourContactsFooter = YES;
     
     // Setup `MXKViewControllerHandling` properties
     self.enableBarTintColorStatusChange = NO;

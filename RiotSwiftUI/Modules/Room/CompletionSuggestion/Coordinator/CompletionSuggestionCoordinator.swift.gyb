@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 //
 // Copyright 2021-2024 New Vector Ltd.
 //
@@ -223,30 +229,44 @@ private class CompletionSuggestionCoordinatorCommandProvider: CommandsProviderPr
 private extension MXKSlashCommand {
     var description: String {
         switch self {
+% if config.capabilities.enable_cmd_selfNickAvatar:
         case .changeDisplayName:
             return VectorL10n.roomCommandChangeDisplayNameDescription
+% end
+% if config.capabilities.enable_cmd_textEffects:
         case .emote:
             return VectorL10n.roomCommandEmoteDescription
+% end
+% if config.capabilities.enable_cmd_joinLeave:
         case .joinRoom:
             return VectorL10n.roomCommandJoinRoomDescription
         case .partRoom:
             return VectorL10n.roomCommandPartRoomDescription
-        case .inviteUser:
-            return VectorL10n.roomCommandInviteUserDescription
-        case .kickUser:
-            return VectorL10n.roomCommandKickUserDescription
+% end
+% if config.capabilities.enable_cmd_ban:
         case .banUser:
             return VectorL10n.roomCommandBanUserDescription
         case .unbanUser:
             return VectorL10n.roomCommandUnbanUserDescription
+% end
+% if config.capabilities.enable_cmd_userMgmt:
+        case .inviteUser:
+            return VectorL10n.roomCommandInviteUserDescription
+        case .kickUser:
+            return VectorL10n.roomCommandKickUserDescription
         case .setUserPowerLevel:
             return VectorL10n.roomCommandSetUserPowerLevelDescription
         case .resetUserPowerLevel:
             return VectorL10n.roomCommandResetUserPowerLevelDescription
+% end
+% if config.capabilities.enable_cmd_roomProps:
         case .changeRoomTopic:
             return VectorL10n.roomCommandChangeRoomTopicDescription
+% end
+% if config.capabilities.enable_voip:
         case .discardSession:
             return VectorL10n.roomCommandDiscardSessionDescription
+% end
         }
     }
 

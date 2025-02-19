@@ -149,6 +149,7 @@ final class SideMenuCoordinator: NSObject, SideMenuCoordinatorType {
     }
     
     private func addSpaceListIfNeeded() {
+        guard BuildSettings.ibm_show_spaces else { return }
         guard self.spaceListCoordinator == nil else {
             return
         }

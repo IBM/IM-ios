@@ -3198,3 +3198,6 @@ To enable access, tap Settings> Location and select Always";
 "pill_message" = "Message";
 "pill_message_from" = "Message from %@";
 "pill_message_in" = "Message in %@";
+
+// IBM
+"send_read_receipts" = "Send read receipts";

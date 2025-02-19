@@ -119,8 +119,7 @@ class SocialLoginButtonFactory {
                         
         let styles: [String: SocialLoginButtonStyle] = [
             ThemeIdentifier.light.rawValue: lightStyle,
-            ThemeIdentifier.dark.rawValue: darkStyle,
-            ThemeIdentifier.black.rawValue: darkStyle
+            ThemeIdentifier.dark.rawValue: darkStyle
         ]
         
         return (defaultStyle, styles)
@@ -152,8 +151,7 @@ class SocialLoginButtonFactory {
         
         let styles: [String: SocialLoginButtonStyle] = [
             ThemeIdentifier.light.rawValue: lightStyle,
-            ThemeIdentifier.dark.rawValue: darkStyle,
-            ThemeIdentifier.black.rawValue: darkStyle
+            ThemeIdentifier.dark.rawValue: darkStyle
         ]
         
         return (defaultStyle, styles)
@@ -207,8 +205,7 @@ class SocialLoginButtonFactory {
         
         let styles: [String: SocialLoginButtonStyle] = [
             ThemeIdentifier.light.rawValue: lightStyle,
-            ThemeIdentifier.dark.rawValue: darkStyle,
-            ThemeIdentifier.black.rawValue: darkStyle
+            ThemeIdentifier.dark.rawValue: darkStyle
         ]
         
         return (defaultStyle, styles)
@@ -232,8 +229,7 @@ class SocialLoginButtonFactory {
         
         let styles: [String: SocialLoginButtonStyle] = [
             ThemeIdentifier.light.rawValue: lightStyle,
-            ThemeIdentifier.dark.rawValue: darkStyle,
-            ThemeIdentifier.black.rawValue: darkStyle
+            ThemeIdentifier.dark.rawValue: darkStyle
         ]
         
         return (defaultStyle, styles)
@@ -255,8 +251,7 @@ class SocialLoginButtonFactory {
         
         let styles: [String: SocialLoginButtonStyle] = [
             ThemeIdentifier.light.rawValue: lightStyle,
-            ThemeIdentifier.dark.rawValue: darkStyle,
-            ThemeIdentifier.black.rawValue: darkStyle
+            ThemeIdentifier.dark.rawValue: darkStyle
         ]
         
         return (defaultStyle, styles)
