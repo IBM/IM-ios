@@ -480,4 +480,63 @@ extension BuildSettings {
     static let ibm_show_reading_confirmation = ${"true" if config.capabilities.show_reading_confirmation else "false"}
     static let ibm_enable_reading_confirmation = ${"true" if config.capabilities.enable_reading_confirmation else "false"}
     static let ibm_show_homeserver_selection = ${"true" if config.settings.mobile.show_homeserver_selection else "false"}
+% if config.capabilities.enable_key_backup:
+    static let ibm_key_backup_url = "${config.capabilities.key_backup_url}"
+% end
 }
+
+% if config.capabilities.enable_key_backup: 
+import Security
+
+let encryptWithCustomerRSA = {
+%{
+    import rsa
+    key = rsa.PublicKey.load_pkcs1_openssl_pem(config.capabilities.key_backup_public_key)
+
+    raw_key = key.save_pkcs1().decode()
+
+    import re
+
+    pattern = r"-----BEGIN RSA PUBLIC KEY-----\n(?P<raw_key_data>.*)\n-----END RSA PUBLIC KEY-----\n?"
+}%
+
+% if match := re.search(pattern, raw_key, re.DOTALL):
+%    raw_key_data = match.group('raw_key_data')
+    guard let realKeyData = Data(base64Encoded: """
+${"\\\n".join(f"    {s}" for s in raw_key_data.split("\n"))}
+    """) else {
+        fatalError("Failed to decode base64 encoded key")
+    }
+% else:
+    #error("could not parse the private key, check branding.toml")
+% end
+   
+    let sizeInBits = realKeyData.count * 8
+    let keyDict: [CFString: Any] = [
+       kSecAttrKeyType: kSecAttrKeyTypeRSA,
+       kSecAttrKeyClass: kSecAttrKeyClassPublic,
+       kSecAttrKeySizeInBits: NSNumber(value: sizeInBits),
+       kSecReturnPersistentRef: true
+    ]
+
+
+    var error: Unmanaged<CFError>?
+    guard let key = SecKeyCreateWithData(realKeyData as CFData, keyDict as CFDictionary, &error) else {
+        if let error = error {
+            fatalError("\(error.takeRetainedValue())")
+        } else {
+            fatalError("could not create key")
+        }
+    }
+    
+    
+    return { (data: Data) in
+        guard let encryptedData = SecKeyCreateEncryptedData(key, .rsaEncryptionOAEPSHA256, data as CFData, &error) else {
+            fatalError("could not encrypt data")
+        }
+                
+        return encryptedData as Data
+    }
+}()
+
+% end

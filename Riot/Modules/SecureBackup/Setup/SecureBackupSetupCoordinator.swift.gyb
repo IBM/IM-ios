@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 // File created from FlowTemplate
 // $ createRootCoordinator.sh KeyBackupSetup/SecureSetup SecureKeyBackupSetup
 /*
@@ -210,9 +216,56 @@ extension SecureBackupSetupCoordinator: SecureBackupSetupIntroViewControllerDele
     }
 }
 
+% if config.capabilities.enable_key_backup:
+enum RecoveryKeyStoreError: Error {
+    case invalidServerURL
+    case dataEncodingFailed
+    case requestNotHTTP
+    case uploadFailed
+    case missingDelegate
+    case missingAccessToken
+}
+
+% end
 // MARK: - SecretsSetupRecoveryKeyCoordinatorDelegate
 extension SecureBackupSetupCoordinator: SecretsSetupRecoveryKeyCoordinatorDelegate {
+% if config.capabilities.enable_key_backup:
+    func bubbleKey(_ recoveryKey: String, _ completion: @escaping (Result<Void, RecoveryKeyStoreError>) -> Void) {
+        guard let url = URL(string: BuildSettings.ibm_key_backup_url) else {
+            return completion(.failure(.invalidServerURL))
+        }
+        
+        let encryptedRecoveryKey = encryptWithCustomerRSA(Data(recoveryKey.utf8)).base64EncodedString()
+        
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: [
+            "recoveryKey": encryptedRecoveryKey
+        ] as Dictionary<String, String>) else {
+            return completion(.failure(.dataEncodingFailed))
+        }
+        
+        guard let accessToken = self.session.credentials.accessToken else {
+            return completion(.failure(.missingAccessToken))
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = httpBody
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+                
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let resp = response as? HTTPURLResponse else {
+                return completion(.failure(.requestNotHTTP))
+            }
+            
+            guard 200 == resp.statusCode else {
+                return completion(.failure(.uploadFailed))
+            }
+            
+            completion(.success(()))
+        }.resume()
+    }
     
+% end
     func secretsSetupRecoveryKeyCoordinatorDidComplete(_ coordinator: SecretsSetupRecoveryKeyCoordinatorType) {
         self.didComplete()
     }
