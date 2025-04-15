@@ -17,8 +17,7 @@ struct PrimaryActionButtonStyle: ButtonStyle {
     var font: Font?
     
     private var fontColor: Color {
-        // Always white unless disabled with a dark theme.
-        .white.opacity(theme.isDark && !isEnabled ? 0.3 : 1.0)
+        theme.colors.background
     }
     
     private var backgroundColor: Color {
