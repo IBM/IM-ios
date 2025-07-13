@@ -363,7 +363,7 @@ final class BuildSettings: NSObject {
     static let messageDetailsAllowShare: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
     static let messageDetailsAllowPermalink: Bool = ${"true" if config.capabilities.show_share_room_dialog else "false"}
     static let messageDetailsAllowViewSource: Bool = true
-    static let messageDetailsAllowSave: Bool = true
+    static let messageDetailsAllowSave: Bool = ${"true" if config.capabilities.enable_media_download else "false"}
     static let messageDetailsAllowCopyMedia: Bool = true
     static let messageDetailsAllowPasteMedia: Bool = true
     
