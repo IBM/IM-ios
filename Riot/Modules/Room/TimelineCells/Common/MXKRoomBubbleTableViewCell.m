@@ -118,6 +118,8 @@ static BOOL _disableLongPressGestureOnEvent;
     _isAutoAnimatedGif = NO;
     _tmpSubviews = [NSMutableArray array];
     _isTextViewNeedsPositioningVerticalSpace = YES;
+    
+    [self.contentView obfusicateFromScreenshot];
 }
 
 - (void)awakeFromNib

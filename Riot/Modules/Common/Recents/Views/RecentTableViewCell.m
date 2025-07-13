@@ -26,10 +26,11 @@ Please see LICENSE in the repository root for full details.
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
     // Initialize unread count badge
     [_missedNotifAndUnreadBadgeBgView.layer setCornerRadius:10];
     _missedNotifAndUnreadBadgeBgViewWidthConstraint.constant = 0;
+    
+    [self.contentView obfusicateFromScreenshot];
 }
 
 - (void)customizeTableViewCellRendering

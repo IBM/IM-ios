@@ -43,6 +43,8 @@ NSString *const kInviteRecentTableViewCellRoomKey = @"kInviteRecentTableViewCell
     [self.rightButton addTarget:self action:@selector(onRightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    [self.contentView obfusicateFromScreenshot];
 }
 
 - (void)customizeTableViewCellRendering

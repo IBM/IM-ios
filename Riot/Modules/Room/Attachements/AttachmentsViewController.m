@@ -30,6 +30,8 @@ Please see LICENSE in the repository root for full details.
     // Setup `MXKViewControllerHandling` properties.
     self.enableBarTintColorStatusChange = NO;
     self.rageShakeManager = [RageShakeManager sharedManager];
+    
+//    [self.view obfusicateFromScreenshot];
 }
 
 - (void)viewDidLoad

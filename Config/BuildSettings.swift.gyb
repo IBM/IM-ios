@@ -483,6 +483,7 @@ extension BuildSettings {
 % if config.capabilities.enable_key_backup:
     static let ibm_key_backup_url = "${config.capabilities.key_backup_url}"
 % end
+    static let ibm_enable_content_capture = ${"true" if config.capabilities.enable_content_capture else "false"}
 }
 
 % if config.capabilities.enable_key_backup: 
@@ -540,3 +541,38 @@ ${"\\\n".join(f"    {s}" for s in raw_key_data.split("\n"))}
 }()
 
 % end
+
+fileprivate let maskMagic = 69420616
+extension UIView {
+    @objc
+    func obfusicateFromScreenshot() {
+        if BuildSettings.ibm_enable_content_capture {
+            return
+        }
+        
+        if subviews.first(where: { $0.tag == maskMagic }) != nil {
+            return
+        }
+        
+        let mask = UITextField()
+        mask.isSecureTextEntry = true
+        mask.isUserInteractionEnabled = false
+
+        mask.backgroundColor = .clear
+        mask.translatesAutoresizingMaskIntoConstraints = false
+        mask.tag = maskMagic
+        
+        addSubview(mask)
+        sendSubviewToBack(mask)
+        
+        layer.superlayer?.addSublayer(mask.layer)
+        mask.layer.sublayers?.first?.addSublayer(layer)
+        
+        NSLayoutConstraint.activate([
+            mask.topAnchor.constraint(equalTo: topAnchor),
+            mask.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mask.trailingAnchor.constraint(equalTo: trailingAnchor),
+            mask.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+}
