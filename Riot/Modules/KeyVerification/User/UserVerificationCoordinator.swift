@@ -118,7 +118,8 @@ final class UserVerificationCoordinator: NSObject, UserVerificationCoordinatorTy
     
     private func presentDeviceVerification(for deviceId: String) {
         
-        let keyVerificationCoordinator = KeyVerificationCoordinator(session: self.session, flow: .verifyDevice(userId: self.userId, deviceId: deviceId), navigationRouter: self.navigationRouter, cancellable: true)
+        let cancellable = !self.session.vc_homeserverConfiguration().encryption.isSecureBackupRequired
+        let keyVerificationCoordinator = KeyVerificationCoordinator(session: self.session, flow: .verifyDevice(userId: self.userId, deviceId: deviceId), navigationRouter: self.navigationRouter, cancellable: cancellable)
         keyVerificationCoordinator.delegate = self
         keyVerificationCoordinator.start()
         

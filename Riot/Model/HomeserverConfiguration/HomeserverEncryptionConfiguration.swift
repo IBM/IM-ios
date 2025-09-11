@@ -22,7 +22,7 @@ final class HomeserverEncryptionConfiguration: NSObject {
          outboundKeysPreSharingMode: MXKKeyPreSharingStrategy,
          deviceDehydrationEnabled: Bool) {
         self.isE2EEByDefaultEnabled = isE2EEByDefaultEnabled
-        self.isSecureBackupRequired = isSecureBackupRequired
+        self.isSecureBackupRequired = isSecureBackupRequired && BuildSettings.secretsRecoveryAllowReset
         self.outboundKeysPreSharingMode = outboundKeysPreSharingMode
         self.secureBackupSetupMethods = secureBackupSetupMethods
         self.deviceDehydrationEnabled = deviceDehydrationEnabled

@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2019-2024 New Vector Ltd.
 
@@ -215,12 +221,14 @@ private enum BackupRows {
                 .info(text: backupTrustInfoText)
             ]
             
+% if config.capabilities.show_encryption_key_reset:
             // TODO: Do not display restore button if all keys are stored on the device
             if true {
                 backupNotTrustedViewStateRows.append(.restoreAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.settingsKeyBackupButtonConnect))
             }
             
             backupNotTrustedViewStateRows.append(.deleteAction(keyBackupVersion: keyBackupVersion))
+% end
             
             backupRows = backupNotTrustedViewStateRows
         }

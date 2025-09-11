@@ -394,7 +394,7 @@ final class BuildSettings: NSObject {
     static let unifiedSearchScreenShowPublicDirectory = true
     
     // MARK: - Secrets Recovery
-    static let secretsRecoveryAllowReset = true
+    static let secretsRecoveryAllowReset = ${"true" if config.capabilities.show_encryption_key_reset else "false"}
     
     // MARK: - UISI Autoreporting
     static let cryptoUISIAutoReportingEnabled = false
