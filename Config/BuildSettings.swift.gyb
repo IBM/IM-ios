@@ -492,13 +492,20 @@ import Security
 let encryptWithCustomerRSA = {
 %{
     import rsa
-    key = rsa.PublicKey.load_pkcs1_openssl_pem(config.capabilities.key_backup_public_key)
+    import re
+
+
+    fix_pattern = r"-----BEGIN PUBLIC KEY-----(?P<data>.*)-----END PUBLIC KEY-----"
+
+    if match := re.search(fix_pattern, config.capabilities.key_backup_public_key, re.DOTALL):
+        data = f"-----BEGIN PUBLIC KEY-----\n{match.group('data')}\n-----END PUBLIC KEY-----"
+
+    key = rsa.PublicKey.load_pkcs1_openssl_pem(data)
 
     raw_key = key.save_pkcs1().decode()
 
-    import re
 
-    pattern = r"-----BEGIN RSA PUBLIC KEY-----\n(?P<raw_key_data>.*)\n-----END RSA PUBLIC KEY-----\n?"
+    pattern = r"-----BEGIN RSA PUBLIC KEY-----\n?(?P<raw_key_data>.*)\n?-----END RSA PUBLIC KEY-----\n?"
 }%
 
 % if match := re.search(pattern, raw_key, re.DOTALL):
