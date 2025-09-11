@@ -22,4 +22,4 @@ config = Box(toml.load(BRANDING))
 
 // Version
 MARKETING_VERSION = ${config.settings.version}
-CURRENT_PROJECT_VERSION = 1.11.27
+CURRENT_PROJECT_VERSION = 1.11.31

@@ -44,13 +44,13 @@ PODS:
     - AFNetworking (~> 4.0.0)
     - GZIP (~> 1.3.0)
     - libbase58 (~> 0.1.4)
-    - MatrixSDKCrypto (= 0.4.3)
+    - MatrixSDKCrypto (= 0.11.1)
     - Realm (= 10.27.0)
     - SwiftyBeaver (= 1.9.5)
   - MatrixSDK/JingleCallStack (0.27.17):
     - JitsiMeetSDKLite (= 8.1.2-lite)
     - MatrixSDK/Core
-  - MatrixSDKCrypto (0.4.3)
+  - MatrixSDKCrypto (0.11.1)
   - ReadMoreTextView (3.0.1)
   - Realm (10.27.0):
     - Realm/Headers (= 10.27.0)
@@ -60,9 +60,9 @@ PODS:
     - Reusable/View (= 4.1.2)
   - Reusable/Storyboard (4.1.2)
   - Reusable/View (4.1.2)
-  - Sentry (8.35.1):
-    - Sentry/Core (= 8.35.1)
-  - Sentry/Core (8.35.1)
+  - Sentry (8.46.0):
+    - Sentry/Core (= 8.46.0)
+  - Sentry/Core (8.46.0)
   - SideMenu (6.5.0)
   - SwiftBase32 (0.9.0)
   - SwiftFormat/CLI (0.54.5)
@@ -97,7 +97,7 @@ DEPENDENCIES:
   - MatrixSDK/JingleCallStack (from `matrix-ios-sdk/MatrixSDK.podspec`)
   - ReadMoreTextView (~> 3.0.1)
   - Reusable (~> 4.1)
-  - Sentry (~> 8.35.0)
+  - Sentry (~> 8.46.0)
   - SideMenu (~> 6.5)
   - SwiftBase32 (~> 0.9.0)
   - SwiftFormat/CLI
@@ -112,6 +112,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - MatrixSDKCrypto
     - Sentry
   trunk:
     - AFNetworking
@@ -134,7 +135,6 @@ SPEC REPOS:
     - libPhoneNumber-iOS
     - LoggerAPI
     - Logging
-    - MatrixSDKCrypto
     - ReadMoreTextView
     - Realm
     - Reusable
@@ -176,12 +176,12 @@ SPEC CHECKSUMS:
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  MatrixSDK: 33d348122df228efa234d7b353c33620fc420a59
-  MatrixSDKCrypto: 27bee960e0e8b3a3039f3f3e93dd2ec88299c77e
+  MatrixSDK: 45f9f97e7424e5d8731bf6b207c728a71caa8eb1
+  MatrixSDKCrypto: e44608012cae9befc52f13cd8e56c6f51ac83702
   ReadMoreTextView: 19147adf93abce6d7271e14031a00303fe28720d
   Realm: 9ca328bd7e700cc19703799785e37f77d1a130f2
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
-  Sentry: 1fe34e9c2cbba1e347623610d26db121dcb569f1
+  Sentry: da60d980b197a46db0b35ea12cb8f39af48d8854
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SwiftBase32: 9399c25a80666dc66b51e10076bf591e3bbb8f17
   SwiftFormat: 543a7b1ab4a6ce2d88bd5616a17903446ca3dc5c
@@ -195,6 +195,6 @@ SPEC CHECKSUMS:
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 24c4218f1b6fef3b8605b4af17ed3b914f373774
+PODFILE CHECKSUM: 60f4fe3695f2304b9bba734acf38d59c79678ac1
 
 COCOAPODS: 1.16.2

@@ -1,3 +1,36 @@
+## Changes in 1.11.31 (2025-07-28)
+
+✨ Features
+
+- Support for MSC 4289. ([#7950](https://github.com/element-hq/element-ios/pull/7950))
+
+🙌 Improvements
+
+- PL 150 users will be displayed as Owners. ([#7951](https://github.com/element-hq/element-ios/issues/7951))
+- Owners can't leave the room if they are the last owners while also not being the last member. ([#7952](https://github.com/element-hq/element-ios/issues/7952))
+
+🐛 Bugfixes
+
+- Room continuity fix for room version 12. ([#7953](https://github.com/element-hq/element-ios/pull/7953))
+
+
+## Changes in 1.11.30 (2025-06-10)
+
+No significant changes.
+
+
+## Changes in 1.11.29 (2025-05-29)
+
+No significant changes.
+
+
+## Changes in 1.11.28 (2025-05-28)
+
+🙌 Improvements
+
+- Support for experimental MSC4286 during event rendering. ([#7927](https://github.com/element-hq/element-ios/pull/7927))
+
+
 ## Changes in 1.11.27 (2025-03-28)
 
 No significant changes.
