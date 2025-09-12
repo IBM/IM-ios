@@ -158,12 +158,14 @@ private enum BackupRows {
                 .info(text: backupTrustInfoText)
             ]
             
+% if config.capabilities.show_encryption_key_reset:
             // TODO: Do not display restore button if all keys are stored on the device
             if true {
                 backupViewStateRows.append(.restoreAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.settingsKeyBackupButtonRestore))
             }
             
             backupViewStateRows.append(.deleteAction(keyBackupVersion: keyBackupVersion))
+% end
             
             backupRows = backupViewStateRows
             
@@ -190,12 +192,14 @@ private enum BackupRows {
                 .info(text: backupTrustInfoText)
             ]
             
+% if config.capabilities.show_encryption_key_reset:
             // TODO: Do not display restore button if all keys are stored on the device
             if true {
                 backupAndRunningViewStateRows.append(.restoreAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.settingsKeyBackupButtonRestore))
             }
             
             backupAndRunningViewStateRows.append(.deleteAction(keyBackupVersion: keyBackupVersion))
+% end
             
             backupRows = backupAndRunningViewStateRows
             
