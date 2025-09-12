@@ -380,7 +380,7 @@ final class BuildSettings: NSObject {
     static let authScreenShowRegister = ${"true" if config.capabilities.enable_registration else "false"}
     static let authScreenShowPhoneNumber = true
     static let authScreenShowForgotPassword = ${"true" if config.capabilities.enable_changing_password else "false"}
-    static let authScreenShowCustomServerOptions = true
+    static let authScreenShowCustomServerOptions = ${"true" if config.capabilities.show_settings_advanced else "false"}
     static let authScreenShowSocialLoginSection = true
     
     // MARK: - Authentication Options
