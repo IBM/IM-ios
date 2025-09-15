@@ -1,3 +1,9 @@
+%{
+import toml
+from box import Box
+
+config = Box(toml.load(BRANDING))
+}%
 /*
 Copyright 2021-2024 New Vector Ltd.
 
@@ -135,20 +141,26 @@ private enum BackupRows {
                 if let progress = progress {
                     backupRows = [
                         .info(text: importProgressText(for: progress)),
+% if config.capabilities.show_encryption_key_reset:
                         .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion)
+% end
                     ]
                 } else {
                     backupRows = [
                         .info(text: VectorL10n.securitySettingsSecureBackupInfoValid),
+% if config.capabilities.show_encryption_key_reset:
                         .restoreFromKeyBackupAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.securitySettingsSecureBackupRestore),
                         .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion)
+% end
                     ]
                 }
             case .keyBackupNotTrusted(let keyBackupVersion, _):
                 backupRows = [
                     .info(text: VectorL10n.securitySettingsSecureBackupInfoValid),
+% if config.capabilities.show_encryption_key_reset:
                     .restoreFromKeyBackupAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.securitySettingsSecureBackupRestore),
                     .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion)
+% end
                 ]
             }
         case .secureBackup(let keyBackupState):
@@ -161,29 +173,37 @@ private enum BackupRows {
                 backupRows = [
                     .info(text: infoText),
                     .createKeyBackupAction,
+% if config.capabilities.show_encryption_key_reset:
                     .resetSecureBackupAction
+% end
                 ]
             case .keyBackup(let keyBackupVersion, _, let progress):
                 if let progress = progress {
                     backupRows = [
                         .info(text: importProgressText(for: progress)),
+% if config.capabilities.show_encryption_key_reset:
                         .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion),
                         .resetSecureBackupAction
+% end
                     ]
                 } else {
                     backupRows = [
                         .info(text: VectorL10n.securitySettingsSecureBackupInfoValid),
+% if config.capabilities.show_encryption_key_reset:
                         .restoreFromKeyBackupAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.securitySettingsSecureBackupRestore),
                         .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion),
                         .resetSecureBackupAction
+% end
                     ]
                 }
             case .keyBackupNotTrusted(let keyBackupVersion, _):
                 backupRows = [
                     .info(text: VectorL10n.securitySettingsSecureBackupInfoValid),
+% if config.capabilities.show_encryption_key_reset:
                     .restoreFromKeyBackupAction(keyBackupVersion: keyBackupVersion, title: VectorL10n.securitySettingsSecureBackupRestore),
                     .deleteKeyBackupAction(keyBackupVersion: keyBackupVersion),
                     .resetSecureBackupAction
+% end
                 ]
             }
         }
