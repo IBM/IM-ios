@@ -377,7 +377,7 @@ final class BuildSettings: NSObject {
     
     
     // MARK: - Authentication Screen
-    static let authScreenShowRegister = ${"true" if config.capabilities.enable_registration else "false"}
+    static let authScreenShowRegister = true // this toogle actaully handles the visibility of onboarding screens
     static let authScreenShowPhoneNumber = true
     static let authScreenShowForgotPassword = ${"true" if config.capabilities.enable_changing_password else "false"}
     static let authScreenShowCustomServerOptions = ${"true" if config.capabilities.show_settings_advanced else "false"}
@@ -480,6 +480,7 @@ extension BuildSettings {
     static let ibm_show_reading_confirmation = ${"true" if config.capabilities.show_reading_confirmation else "false"}
     static let ibm_enable_reading_confirmation = ${"true" if config.capabilities.enable_reading_confirmation else "false"}
     static let ibm_show_homeserver_selection = ${"true" if config.settings.mobile.show_homeserver_selection else "false"}
+    static let ibm_enable_registration = ${"true" if config.capabilities.enable_registration else "false"}
 % if config.capabilities.enable_key_backup:
     static let ibm_key_backup_url = "${config.capabilities.key_backup_url}"
 % end
